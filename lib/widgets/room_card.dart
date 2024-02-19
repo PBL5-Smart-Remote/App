@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:smart_home_fe/models/room_brief_model.dart';
 
 class RoomCard extends StatefulWidget {
-  late String imageLink;
-  late String roomName;
-  late int numDevices;
-  late int numConnected;
-  RoomCard(this.imageLink, this.roomName, this.numDevices, this.numConnected, {super.key});
+  late RoomBriefModel room;
+  RoomCard(this.room, {super.key});
 
   @override
   State<RoomCard> createState() => _RoomCardState();
@@ -30,7 +28,7 @@ class _RoomCardState extends State<RoomCard> {
             height: 100,
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
-              image: DecorationImage(image : NetworkImage(widget.imageLink), fit: BoxFit.fitHeight)
+              image: DecorationImage(image : NetworkImage(widget.room.imageLink), fit: BoxFit.fitHeight)
             ),
           ),
           Container(
@@ -38,8 +36,8 @@ class _RoomCardState extends State<RoomCard> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(widget.roomName, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
-                Text("${widget.numDevices} devices, ${widget.numConnected} connected", style: TextStyle(color: Colors.grey[600]))
+                Text(widget.room.roomName, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+                Text("${widget.room.numDevices} devices, ${widget.room.numConnected} connected", style: TextStyle(color: Colors.grey[600]))
               ],
             ),
           )

@@ -1,4 +1,6 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_home_fe/pages/device_list.dart';
 import 'package:smart_home_fe/pages/room_list.dart';
 import 'package:smart_home_fe/widgets/appbar_title.dart';
 import 'package:smart_home_fe/widgets/figure_icon.dart';
@@ -21,7 +23,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   final List<Widget> _tabViews = [
     const RoomList(),
-    const Center(child: Text("Devices list"))
+    const DeviceList(),
   ];
 
   @override
@@ -79,6 +81,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             Expanded(
               child: TabBarView(
                 controller: _tabController,
+                dragStartBehavior: DragStartBehavior.down,
+                physics: const BouncingScrollPhysics(),
                 children: _tabViews,
               ),
             ),

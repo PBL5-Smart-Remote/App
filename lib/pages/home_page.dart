@@ -1,19 +1,23 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_home_fe/pages/device_list.dart';
+import 'package:smart_home_fe/pages/generic_page.dart';
 import 'package:smart_home_fe/pages/room_list.dart';
 import 'package:smart_home_fe/widgets/appbar_title.dart';
 import 'package:smart_home_fe/widgets/figure_icon.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
+class HomePage extends GenericPage {
+  HomePage({super.key}) {
+    name = const Text("Home");
+    icon = const Icon(Icons.home);
+    selectedColor = Colors.purple;
+  }
+  
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
-  int _currentTabIndex = 0;
   late final TabController _tabController;
 
   final _tabNames = [

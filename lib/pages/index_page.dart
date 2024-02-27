@@ -1,7 +1,9 @@
-import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_home_fe/pages/account_page.dart';
+import 'package:smart_home_fe/pages/connection_page.dart';
 import 'package:smart_home_fe/pages/home_page.dart';
+import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+import 'package:smart_home_fe/pages/voice_page.dart';
 
 class IndexPage extends StatefulWidget {
   const IndexPage({super.key});
@@ -13,6 +15,13 @@ class IndexPage extends StatefulWidget {
 class _IndexPageState extends State<IndexPage> {
   final _pageController = PageController();
   int _currentPage = 0;
+
+  final _pages = [
+    HomePage(),
+    VoicePage(),
+    ConnectionPage(),
+    AccountPage(),
+  ];
 
   @override
   void dispose() {
@@ -30,43 +39,21 @@ class _IndexPageState extends State<IndexPage> {
             _currentPage = index;
           });
         },
-        children: [
-          const HomePage(),
-          Container(),
-          const AccountPage(),
-        ],
+        children: _pages,
       ),
-      bottomNavigationBar: ConvexAppBar(
-        initialActiveIndex: 1,
-        style: TabStyle.fixedCircle, 
-        activeColor: Colors.grey[700],
-        color: Colors.grey[500],
-        backgroundColor: Colors.white,
-        items: [
-          const TabItem(icon: Icons.home, title: "Home"),
-          TabItem(
-            icon: Container(
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle, 
-                color: Colors.blue
-              ), 
-              width: 50, 
-              height: 50, 
-              child: const Icon(Icons.mic_rounded, color: Colors.white)
-            )
-          ),
-          const TabItem(icon: Icons.person, title: "Account"),
-        ],
-        onTap: (index) {
-          setState(() {
-            _currentPage = index;
-            _pageController.animateToPage(
-              index,
-              duration: Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            );
-          });
+      bottomNavigationBar: SalomonBottomBar(
+        margin: const EdgeInsets.all(15),
+        currentIndex: _currentPage,
+        onTap: (selectedIndex) {
+          _currentPage = selectedIndex;
+          _pageController.animateToPage(
+            selectedIndex,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
         },
+        items: _pages.map(
+          (page) => SalomonBottomBarItem(icon: page.icon, title: page.name, selectedColor: page.selectedColor)).toList()
       ),
     );
   }

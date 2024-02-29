@@ -26,22 +26,18 @@ class _ConnectionPageState extends State<ConnectionPage> {
 
   @override
   void initState() {
-    subscription = WiFiScan.instance.onScannedResultsAvailable.listen((result) => setState(() => accessPoints = result));
+    subscription = WiFiScan.instance.onScannedResultsAvailable.listen((result) => setState(() => accessPoints = result.where((element) => element.standard == WiFiStandards.legacy).toList()));
     super.initState();
   }
 
   Future<void> _startScan(BuildContext context) async {
-      final can = await WiFiScan.instance.canStartScan();
-      if (can != CanStartScan.yes) {
-        if (mounted) kShowSnackBar(context, "Cannot start scan: $can");
-        return;
-      }
-    
-
+    final can = await WiFiScan.instance.canStartScan();
+    if (can != CanStartScan.yes) {
+      if (mounted) kShowSnackBar(context, "Cannot start scan: $can");
+      return;
+    }
     // call startScan API
-    final result = await WiFiScan.instance.startScan();
-    // if (mounted) kShowSnackBar(context, "startScan: $result");
-    // reset access points.
+    await WiFiScan.instance.startScan();
   }
 
   @override

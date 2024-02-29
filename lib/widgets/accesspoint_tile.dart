@@ -1,57 +1,90 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_iot_wifi/flutter_iot_wifi.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:wifi_scan/wifi_scan.dart';
 
-class AccessPointTile extends StatelessWidget {
-  final WiFiAccessPoint accessPoint;
+import '../helpers/show_snackbar.dart';
+import '../helpers/validators.dart';
 
+class AccessPointTile extends StatefulWidget {
+  final WiFiAccessPoint accessPoint;
   const AccessPointTile({super.key, required this.accessPoint});
 
+  @override
+  State<AccessPointTile> createState() => _AccessPointTileState();
+}
+
+class _AccessPointTileState extends State<AccessPointTile> {
+  final firmwarePasswordController = TextEditingController();
+
+  Future<bool> _checkPermissions() async {
+    if (Platform.isIOS || await Permission.location.request().isGranted) {
+      return true;
+    }
+    return false;
+  }
+
   Widget _buildInfo(String label, dynamic value) => Container(
-        decoration: const BoxDecoration(
-          border: Border(bottom: BorderSide(color: Colors.grey)),
+    decoration: const BoxDecoration(
+      border: Border(bottom: BorderSide(color: Colors.grey)),
+    ),
+    child: Row(
+      children: [
+        Text(
+          "$label: ",
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        child: Row(
-          children: [
-            Text(
-              "$label: ",
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            Expanded(child: Text(value.toString()))
-          ],
-        ),
-      );
+        Expanded(child: Text(value.toString()))
+      ],
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
-    final title = accessPoint.ssid.isNotEmpty ? accessPoint.ssid : "**EMPTY**";
-    final signalIcon = accessPoint.level >= -80
+    final title = widget.accessPoint.ssid.isNotEmpty ? widget.accessPoint.ssid : "**EMPTY**";
+    final signalIcon = widget.accessPoint.level >= -80
         ? Icons.signal_wifi_4_bar
         : Icons.signal_wifi_0_bar;
     return ListTile(
       visualDensity: VisualDensity.compact,
       leading: Icon(signalIcon),
       title: Text(title),
-      subtitle: Text(accessPoint.capabilities),
+      subtitle: Text(widget.accessPoint.capabilities),
       onTap: () => showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: Text(title),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildInfo("BSSDI", accessPoint.bssid),
-              _buildInfo("Capability", accessPoint.capabilities),
-              _buildInfo("frequency", "${accessPoint.frequency}MHz"),
-              _buildInfo("level", accessPoint.level),
-              _buildInfo("standard", accessPoint.standard),
-              _buildInfo("centerFrequency0", "${accessPoint.centerFrequency0}MHz"),
-              _buildInfo("centerFrequency1", "${accessPoint.centerFrequency1}MHz"),
-              _buildInfo("channelWidth", accessPoint.channelWidth),
-              _buildInfo("isPasspoint", accessPoint.isPasspoint),
-              _buildInfo("operatorFriendlyName", accessPoint.operatorFriendlyName),
-              _buildInfo("venueName", accessPoint.venueName),
-              _buildInfo("is80211mcResponder", accessPoint.is80211mcResponder),
-            ],
+          content: Form(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  readOnly: true,
+                  initialValue: title,
+                  decoration: const InputDecoration(
+                    labelText: "SSID",
+                  ),
+                ),
+                TextFormField(
+                  validator: validateEmpty,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    labelText: "Password",
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    if (await _checkPermissions()) {
+                      FlutterIotWifi.connect(title, firmwarePasswordController.text, prefix: true)
+                          .then((value) => kShowSnackBar(context, "Connect successfully"));
+                    } else {
+                      kShowSnackBar(context, "Connect failed");
+                    }
+                  },
+                  child: Text("Connect"))
+              ],
+            ),
           ),
         ),
       ),

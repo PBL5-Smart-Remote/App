@@ -13,8 +13,10 @@ dependencies:
     sdk: flutter
   flutter_iot_wifi: ^0.0.3
   font_awesome_flutter: ^10.7.0
+  http: ^1.2.0
   permission_handler: ^11.3.0
   salomon_bottom_bar: ^3.3.2
+  shared_preferences: ^2.2.2
   wifi_iot: ^0.3.19
   wifi_scan: ^0.4.1
 

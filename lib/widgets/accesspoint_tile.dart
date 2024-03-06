@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_iot_wifi/flutter_iot_wifi.dart';
@@ -16,7 +18,9 @@ class AccessPointTile extends StatefulWidget {
 }
 
 class _AccessPointTileState extends State<AccessPointTile> {
-  final firmwarePasswordController = TextEditingController();
+  final _firmwarePasswordController = TextEditingController();
+  final _serverSSIDController = TextEditingController();
+  final _serverPasswordController = TextEditingController();
 
   Future<bool> _checkPermissions() async {
     if (Platform.isIOS || await Permission.location.request().isGranted) {
@@ -68,6 +72,7 @@ class _AccessPointTileState extends State<AccessPointTile> {
                 ),
                 TextFormField(
                   validator: validateEmpty,
+                  controller: _firmwarePasswordController,
                   obscureText: true,
                   decoration: const InputDecoration(
                     labelText: "Password",
@@ -76,10 +81,17 @@ class _AccessPointTileState extends State<AccessPointTile> {
                 ElevatedButton(
                   onPressed: () async {
                     if (await _checkPermissions()) {
-                      FlutterIotWifi.connect(title, firmwarePasswordController.text, prefix: true)
-                          .then((value) => kShowSnackBar(context, "Connect successfully"));
+                      FlutterIotWifi.connect(title, _firmwarePasswordController.text, prefix: true)
+                      .then((success) {
+                        if(success == true) {
+                          kShowSnackBar(context, "Connect successfully");
+
+                        } else {
+                          kShowSnackBar(context, "Connect failed");
+                        }
+                      });
                     } else {
-                      kShowSnackBar(context, "Connect failed");
+                      kShowSnackBar(context, "No permission");
                     }
                   },
                   child: Text("Connect"))

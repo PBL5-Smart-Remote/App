@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_iot_wifi/flutter_iot_wifi.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:smart_home_fe/api/connection_api.dart';
+import 'package:smart_home_fe/models/connection_model.dart';
 import 'package:wifi_scan/wifi_scan.dart';
 
 import '../helpers/show_snackbar.dart';
@@ -29,21 +31,6 @@ class _AccessPointTileState extends State<AccessPointTile> {
     return false;
   }
 
-  Widget _buildInfo(String label, dynamic value) => Container(
-    decoration: const BoxDecoration(
-      border: Border(bottom: BorderSide(color: Colors.grey)),
-    ),
-    child: Row(
-      children: [
-        Text(
-          "$label: ",
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-        Expanded(child: Text(value.toString()))
-      ],
-    ),
-  );
-
   @override
   Widget build(BuildContext context) {
     final title = widget.accessPoint.ssid.isNotEmpty ? widget.accessPoint.ssid : "**EMPTY**";
@@ -58,7 +45,7 @@ class _AccessPointTileState extends State<AccessPointTile> {
       onTap: () => showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text(title),
+          title: const Text("Connect to ESP"),
           content: Form(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -85,7 +72,48 @@ class _AccessPointTileState extends State<AccessPointTile> {
                       .then((success) {
                         if(success == true) {
                           kShowSnackBar(context, "Connect successfully");
-
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text("SET UP ESP"),
+                              content: Form(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    TextFormField(
+                                      validator: validateEmpty,
+                                      controller: _serverSSIDController,
+                                      decoration: const InputDecoration(
+                                        labelText: "SSID",
+                                      ),
+                                    ),
+                                    TextFormField(
+                                      validator: validateEmpty,
+                                      controller: _serverPasswordController,
+                                      obscureText: true,
+                                      decoration: const InputDecoration(
+                                        labelText: "Password",
+                                      ),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () async {
+                                        String ssid = _serverSSIDController.text;
+                                        String password = _serverPasswordController.text;
+                                        ConnectionAPI.setupESP(ConnectionModel(ssid, password))
+                                        .then((success) {
+                                          if (success) {
+                                            kShowSnackBar(context, "Set up successfully");
+                                          } else {
+                                            kShowSnackBar(context, "Set up failed");
+                                          }
+                                        });
+                                      },
+                                      child: const Text("Set up"))
+                                  ],
+                                ),
+                              ),
+                            )
+                          );
                         } else {
                           kShowSnackBar(context, "Connect failed");
                         }
@@ -94,7 +122,7 @@ class _AccessPointTileState extends State<AccessPointTile> {
                       kShowSnackBar(context, "No permission");
                     }
                   },
-                  child: Text("Connect"))
+                  child: const Text("Connect"))
               ],
             ),
           ),

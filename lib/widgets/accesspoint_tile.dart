@@ -3,7 +3,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_iot_wifi/flutter_iot_wifi.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:show_hide_password/show_hide_password.dart';
 import 'package:smart_home_fe/api/connection_api.dart';
 import 'package:smart_home_fe/models/connection_model.dart';
 import 'package:wifi_scan/wifi_scan.dart';
@@ -57,10 +59,11 @@ class _AccessPointTileState extends State<AccessPointTile> {
                     labelText: "SSID",
                   ),
                 ),
-                TextFormField(
-                  validator: validateEmpty,
+                ShowHidePasswordTextField(
                   controller: _firmwarePasswordController,
-                  obscureText: true,
+                  iconSize: 20,
+                  visibleOffIcon: FontAwesomeIcons.eyeSlash,
+                  visibleOnIcon: FontAwesomeIcons.eye,
                   decoration: const InputDecoration(
                     labelText: "Password",
                   ),
@@ -72,6 +75,7 @@ class _AccessPointTileState extends State<AccessPointTile> {
                       .then((success) {
                         if(success == true) {
                           kShowSnackBar(context, "Connect successfully");
+                          Navigator.pop(context);
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
@@ -87,10 +91,11 @@ class _AccessPointTileState extends State<AccessPointTile> {
                                         labelText: "SSID",
                                       ),
                                     ),
-                                    TextFormField(
-                                      validator: validateEmpty,
+                                    ShowHidePasswordTextField(
                                       controller: _serverPasswordController,
-                                      obscureText: true,
+                                      iconSize: 20,
+                                      visibleOffIcon: FontAwesomeIcons.eyeSlash,
+                                      visibleOnIcon: FontAwesomeIcons.eye,
                                       decoration: const InputDecoration(
                                         labelText: "Password",
                                       ),
@@ -103,6 +108,7 @@ class _AccessPointTileState extends State<AccessPointTile> {
                                         .then((success) {
                                           if (success) {
                                             kShowSnackBar(context, "Set up successfully");
+                                            Navigator.pop(context);
                                           } else {
                                             kShowSnackBar(context, "Set up failed");
                                           }

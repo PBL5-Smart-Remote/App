@@ -21,16 +21,10 @@ class _RoomListState extends State<RoomList> {
           physics: const BouncingScrollPhysics(),
           children: [
             RoomCard(RoomBriefModel(link, "Living room", 4, 3)),
-            RoomCard(RoomBriefModel(link, "Living room", 4, 3)),
-            RoomCard(RoomBriefModel(link, "Living room", 4, 3)),
-            RoomCard(RoomBriefModel(link, "Living room", 4, 3)),
-            RoomCard(RoomBriefModel(link, "Living room", 4, 3)),
-            RoomCard(RoomBriefModel(link, "Living room", 4, 3)),
-            RoomCard(RoomBriefModel(link, "Living room", 4, 3)),
-            RoomCard(RoomBriefModel(link, "Living room", 4, 3)),
-            RoomCard(RoomBriefModel(link, "Living room", 4, 3)),
-            RoomCard(RoomBriefModel(link, "Living room", 4, 3)),
-            RoomCard(RoomBriefModel(link, "Living room", 4, 3)),
+            RoomCard(RoomBriefModel(link, "Dining room", 4, 3)),
+            RoomCard(RoomBriefModel(link, "Bathroom", 4, 3)),
+            RoomCard(RoomBriefModel(link, "Bedroom", 4, 3)),
+            RoomCard(RoomBriefModel(link, "Gaming room", 4, 3)),
           ],
         )
     );

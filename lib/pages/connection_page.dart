@@ -26,7 +26,12 @@ class _ConnectionPageState extends State<ConnectionPage> {
 
   @override
   void initState() {
-    subscription = WiFiScan.instance.onScannedResultsAvailable.listen((result) => setState(() => accessPoints = result.where((element) => element.standard == WiFiStandards.legacy).toList()));
+    // subscription = WiFiScan.instance.onScannedResultsAvailable
+    //                 .listen((result) => setState(() => accessPoints = result.where((element) => element.standard == WiFiStandards.legacy)
+    //                 .toList()));
+    subscription = WiFiScan.instance.onScannedResultsAvailable
+                    .listen((result) => setState(() => accessPoints = result
+                    .toList()));                
     super.initState();
   }
 

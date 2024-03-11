@@ -1,4 +1,5 @@
 class ConnectionModel {
+  late String idUser;
   late String ssid;
   late String password;
 

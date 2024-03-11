@@ -49,11 +49,12 @@ class _DeviceCardState extends State<DeviceCard> {
                 Text(widget.device.isActive ? "On" : "Off", style: const TextStyle(color: Colors.white, fontSize: 20)),
                 Switch(
                   value: widget.device.isActive,
+                  trackOutlineColor: MaterialStateColor.resolveWith((states) => Colors.grey.withOpacity(0)),
                   activeColor: Colors.white,
                   activeTrackColor: Colors.green[400],
                   inactiveThumbColor: Colors.white,
-                  inactiveTrackColor: Colors.grey[200],
-                  onChanged: (value) {
+                  inactiveTrackColor: Colors.grey[300],
+                  onChanged: (value) async {
                     setState(() {
                       widget.device.isActive = value;
                     });

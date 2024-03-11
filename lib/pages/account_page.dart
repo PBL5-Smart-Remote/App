@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:smart_home_fe/pages/generic_page.dart';
 import 'package:smart_home_fe/widgets/appbar_title.dart';
 
-class AccountPage extends StatefulWidget {
-  const AccountPage({super.key});
+class AccountPage extends GenericPage {
+  AccountPage({super.key}) {
+    name = const Text("Account");
+    icon = const Icon(Icons.person);
+    selectedColor = Colors.teal;
+  }
 
   @override
   State<AccountPage> createState() => _AccountPageState();
@@ -15,6 +20,9 @@ class _AccountPageState extends State<AccountPage> {
       appBar: AppBar(
         title: const AppBarTitle("Account"),
       ),
+      body: const Center(
+        child: Icon(Icons.person)
+      )
     );
   }
 }

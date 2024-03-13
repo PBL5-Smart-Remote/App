@@ -1,12 +1,11 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:smart_home_fe/helpers/show_snackbar.dart';
+import 'package:gradient_borders/box_borders/gradient_box_border.dart';
+import 'package:provider/provider.dart';
+import 'package:smart_home_fe/utils/show_snackbar.dart';
 import 'package:smart_home_fe/pages/generic_page.dart';
-import 'package:smart_home_fe/widgets/accesspoint_tile.dart';
-import 'package:smart_home_fe/widgets/appbar_title.dart';
-import 'package:wifi_iot/wifi_iot.dart';
-import 'package:wifi_scan/wifi_scan.dart';
+import 'package:smart_home_fe/view_models/connection_view_model.dart';
+import 'package:smart_home_fe/views/accesspoint_view.dart';
+import 'package:smart_home_fe/views/appbar_title.dart';
 
 class ConnectionPage extends GenericPage{
   ConnectionPage({super.key}) {
@@ -20,29 +19,20 @@ class ConnectionPage extends GenericPage{
 }
 
 class _ConnectionPageState extends State<ConnectionPage> {
-
-  List<WiFiAccessPoint> accessPoints = <WiFiAccessPoint>[];
-  StreamSubscription<List<WiFiAccessPoint>>? subscription;
+  final ScrollController _scrollController = ScrollController();
 
   @override
-  void initState() {
-    // subscription = WiFiScan.instance.onScannedResultsAvailable
-    //                 .listen((result) => setState(() => accessPoints = result.where((element) => element.standard == WiFiStandards.legacy)
-    //                 .toList()));
-    subscription = WiFiScan.instance.onScannedResultsAvailable
-                    .listen((result) => setState(() => accessPoints = result
-                    .toList()));                
-    super.initState();
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
-  Future<void> _startScan(BuildContext context) async {
-    final can = await WiFiScan.instance.canStartScan();
-    if (can != CanStartScan.yes) {
-      if (mounted) kShowSnackBar(context, "Cannot start scan: $can");
-      return;
-    }
-    // call startScan API
-    await WiFiScan.instance.startScan();
+  void scrollToTop() {
+    _scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
   }
 
   @override
@@ -55,31 +45,37 @@ class _ConnectionPageState extends State<ConnectionPage> {
         padding: const EdgeInsets.all(10),
         child: Column(
           mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    ElevatedButton.icon(
-                      icon: const Icon(Icons.perm_scan_wifi),
-                      label: const Text('SCAN'),
-                      onPressed: () async => _startScan(context),
-                    ),
-                  ]
+                ElevatedButton.icon(
+                  icon: const Icon(Icons.perm_scan_wifi),
+                  label: const Text('SCAN'),
+                  onPressed: () async { 
+                    await Provider.of<ConnectionViewModel>(context, listen: false).scanWifi(context);
+                    // scrollToTop();
+                  },
                 ),
-                const Divider(),
-                Flexible(
-                  child: Center(
-                    child: accessPoints.isEmpty
-                        ? const Text("NO SCANNED RESULTS")
-                        : ListView.builder(
-                            itemCount: accessPoints.length,
-                            itemBuilder: (context, i) => AccessPointTile(accessPoint: accessPoints[i])
-                          ),
-                  ),
+              ]
+            ),
+            const Divider(),
+            Consumer<ConnectionViewModel>(
+              builder: (context, connectionViewModel, child) => Flexible(
+                child: Center(
+                  child: connectionViewModel.accessPoints.isEmpty
+                    ? const Text("NO SCANNED RESULTS")
+                    : ListView.builder(
+                        // controller: _scrollController,
+                        itemCount: connectionViewModel.accessPoints.length,
+                        itemBuilder: (context, i) => AccessPointView(accessPoint: connectionViewModel.accessPoints[i])
+                      ),
                 ),
-              ],
-        ),
+              ),
+            ),
+          ],
+        )
       )
     );
   }

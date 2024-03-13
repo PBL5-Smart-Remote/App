@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:smart_home_fe/models/room_brief_model.dart';
 import 'package:smart_home_fe/pages/room_devices_page.dart';
 
-class RoomCard extends StatefulWidget {
+class RoomView extends StatefulWidget {
   late RoomBriefModel room;
-  RoomCard(this.room, {super.key});
+  RoomView(this.room, {super.key});
 
   @override
-  State<RoomCard> createState() => _RoomCardState();
+  State<RoomView> createState() => _RoomViewState();
 }
 
-class _RoomCardState extends State<RoomCard> {
+class _RoomViewState extends State<RoomView> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -30,7 +30,7 @@ class _RoomCardState extends State<RoomCard> {
               height: 100,
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
-                image: DecorationImage(image : NetworkImage(widget.room.imageLink), fit: BoxFit.fitHeight)
+                image: DecorationImage(image : NetworkImage(widget.room.roomImage), fit: BoxFit.fitHeight)
               ),
             ),
             Container(

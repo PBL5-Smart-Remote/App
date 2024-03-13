@@ -4,9 +4,9 @@ import 'package:smart_home_fe/models/connection_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ConnectionAPI {
-  static const String _setupAPI = "/setup";
+  final String _setupAPI = "/setup";
 
-  static Future<bool> setupESP(ConnectionModel connection) async {
+  Future<bool> setupESP(ConnectionModel connection) async {
     try {
       // var prefs = await SharedPreferences.getInstance();
       // var token = prefs.getString('iduser');
@@ -23,7 +23,7 @@ class ConnectionAPI {
       );
       return response.statusCode == 200;
     } catch (err) {
-      print(err);
+      print('[ConnectionAPI][SetupESP]: $err');
       return false;
     }
   }

@@ -1,7 +1,7 @@
 class RoomBriefModel {
-  late String imageLink;
+  late String roomImage;
   late String roomName;
   late int numDevices;
   late int numConnected;
-  RoomBriefModel(this.imageLink, this.roomName, this.numDevices, this.numConnected);
+  RoomBriefModel(this.roomImage, this.roomName, this.numDevices, this.numConnected);
 }

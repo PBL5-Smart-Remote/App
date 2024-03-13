@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-class FigureIcon extends StatefulWidget {
+class FigureIconView extends StatefulWidget {
   late Icon icon;
   late String field;
   late String figure;
-  FigureIcon(this.icon, this.field, this.figure, {super.key});
+  FigureIconView(this.icon, this.field, this.figure, {super.key});
 
   @override
-  State<FigureIcon> createState() => _FigureIconState();
+  State<FigureIconView> createState() => _FigureIconViewState();
 }
 
-class _FigureIconState extends State<FigureIcon> {
+class _FigureIconViewState extends State<FigureIconView> {
   @override
   Widget build(BuildContext context) {
     return Container(

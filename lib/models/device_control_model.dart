@@ -1,7 +1,7 @@
 class DeviceControlModel {
-  late String idESP;
-  late String idRelayPin; 
-  late String action; 
+  String idESP;
+  String idDevice; 
+  int status; 
   
-  DeviceControlModel(this.idESP, this.idRelayPin, this.action);
+  DeviceControlModel(this.idESP, this.idDevice, this.status);
 }

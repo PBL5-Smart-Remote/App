@@ -1,10 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_home_fe/pages/device_list.dart';
 import 'package:smart_home_fe/pages/generic_page.dart';
-import 'package:smart_home_fe/pages/room_list.dart';
-import 'package:smart_home_fe/widgets/appbar_title.dart';
-import 'package:smart_home_fe/widgets/figure_icon.dart';
+import 'package:smart_home_fe/views/appbar_title.dart';
+import 'package:smart_home_fe/views/esp_list_view.dart';
+import 'package:smart_home_fe/views/figure_icon_view.dart';
+import 'package:smart_home_fe/views/room_list_view.dart';
 
 class HomePage extends GenericPage {
   HomePage({super.key}) {
@@ -26,8 +26,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   ];
 
   final List<Widget> _tabViews = [
-    const RoomList(),
-    const DeviceList(),
+    const RoomListView(),
+    const ESPListView(),
   ];
 
   @override
@@ -59,11 +59,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  FigureIcon(Icon(Icons.water_drop, color: Colors.blue[300]), "humidity", "75%"),
+                  FigureIconView(Icon(Icons.water_drop, color: Colors.blue[300]), "humidity", "75%"),
                   VerticalDivider(thickness: 1, width: 1, color: Colors.grey[200]),
-                  FigureIcon(Icon(Icons.electric_bolt_rounded, color: Colors.blue[900]), "energy", "60kwh"),
+                  FigureIconView(Icon(Icons.electric_bolt_rounded, color: Colors.blue[900]), "energy", "60kwh"),
                   VerticalDivider(thickness: 1, width: 1, color: Colors.grey[200]),
-                  FigureIcon(Icon(Icons.thermostat_rounded, color: Colors.amber[900]), "temp", "24°C")
+                  FigureIconView(Icon(Icons.thermostat_rounded, color: Colors.amber[900]), "temp", "24°C")
                 ],
               )
             ), // Figure bar

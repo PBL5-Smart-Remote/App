@@ -5,23 +5,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_iot_wifi/flutter_iot_wifi.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:show_hide_password/show_hide_password.dart';
 import 'package:smart_home_fe/api/connection_api.dart';
 import 'package:smart_home_fe/models/connection_model.dart';
+import 'package:smart_home_fe/view_models/connection_view_model.dart';
 import 'package:wifi_scan/wifi_scan.dart';
+import '../utils/show_snackbar.dart';
+import '../utils/validators.dart';
 
-import '../helpers/show_snackbar.dart';
-import '../helpers/validators.dart';
-
-class AccessPointTile extends StatefulWidget {
+class AccessPointView extends StatefulWidget {
   final WiFiAccessPoint accessPoint;
-  const AccessPointTile({super.key, required this.accessPoint});
+  const AccessPointView({super.key, required this.accessPoint});
 
   @override
-  State<AccessPointTile> createState() => _AccessPointTileState();
+  State<AccessPointView> createState() => _AccessPointViewState();
 }
 
-class _AccessPointTileState extends State<AccessPointTile> {
+class _AccessPointViewState extends State<AccessPointView> {
+
   final _firmwarePasswordController = TextEditingController();
   final _serverSSIDController = TextEditingController();
   final _serverPasswordController = TextEditingController();
@@ -104,7 +106,8 @@ class _AccessPointTileState extends State<AccessPointTile> {
                                       onPressed: () async {
                                         String ssid = _serverSSIDController.text;
                                         String password = _serverPasswordController.text;
-                                        ConnectionAPI.setupESP(ConnectionModel(ssid, password))
+                                        Provider.of<ConnectionViewModel>(context, listen: false).setupESP(ConnectionModel(ssid, password))
+                                        // ConnectionAPI.setupESP(ConnectionModel(ssid, password))
                                         .then((success) {
                                           if (success) {
                                             kShowSnackBar(context, "Set up successfully");

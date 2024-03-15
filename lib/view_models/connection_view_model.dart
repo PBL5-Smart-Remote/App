@@ -30,6 +30,7 @@ class ConnectionViewModel with ChangeNotifier {
       final can = await WiFiScan.instance.canStartScan();
       if (can == CanStartScan.yes) {
         await WiFiScan.instance.startScan();
+        notifyListeners();
       } else {
         kShowSnackBar(context, '$can');
       }

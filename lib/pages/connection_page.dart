@@ -67,7 +67,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
                   child: connectionViewModel.accessPoints.isEmpty
                     ? const Text("NO SCANNED RESULTS")
                     : ListView.builder(
-                        // controller: _scrollController,
+                        controller: _scrollController,
                         itemCount: connectionViewModel.accessPoints.length,
                         itemBuilder: (context, i) => AccessPointView(accessPoint: connectionViewModel.accessPoints[i])
                       ),

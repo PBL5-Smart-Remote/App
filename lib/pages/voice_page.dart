@@ -29,6 +29,7 @@ class _VoicePageState extends State<VoicePage> {
   Timer? _ampTimer;
   Amplitude? _amplitude;
   String? voicePath;
+  String label = "";
 
   @override
   Widget build(BuildContext context) {
@@ -45,11 +46,16 @@ class _VoicePageState extends State<VoicePage> {
               children: <Widget>[
                 _buildRecordStopControl(),
                 if (!_isRecording && voicePath != null) IconButton(
-                  onPressed: _sendVoice, 
+                  onPressed: () async {
+                    label = await _sendVoice();
+                    print(label);
+                    setState(() {});
+                  }, 
                   icon: const Icon(Icons.send)
                 )
               ],
             ),
+            Text(label),
           ],
         ),
       )
@@ -103,8 +109,8 @@ class _VoicePageState extends State<VoicePage> {
   }
 
   Future<void> _stopRecording() async {
-    _timer?.cancel();
-    _ampTimer?.cancel();
+    _timer?.cancel(); 
+    _ampTimer?.cancel(); 
     voicePath = await _audioRecorder.stop();
     
     print(voicePath);
@@ -126,16 +132,16 @@ class _VoicePageState extends State<VoicePage> {
     });
   }
 
-  Future<void> _sendVoice() async {
+  Future<String> _sendVoice() async {
     final directory = await getApplicationDocumentsDirectory();
     final wavFilePath = '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.wav';
 
     // Copy the recorded audio file to a new WAV file
-    await File(voicePath!).copy(wavFilePath);
+    // await File(voicePath!).copy(wavFilePath);
     print(voicePath);
-    voicePath = wavFilePath;
-    print(voicePath);
+    // voicePath = wavFilePath;
+    // print(voicePath);
 
-    await voiceService.sendVoice(voicePath!);
+    return await voiceService.sendVoice(voicePath!);
   }
 }

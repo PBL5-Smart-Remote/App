@@ -22,8 +22,8 @@ class _ESPViewState extends State<ESPView> {
         borderRadius: BorderRadius.circular(10)
       ),
       child: GridView.count(
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 15,
+          mainAxisSpacing: 5,
+          crossAxisSpacing: 5,
           crossAxisCount: 2,
           physics: const BouncingScrollPhysics(),
           children: widget.espModel.devices.map((device) => DeviceView(device)).toList()

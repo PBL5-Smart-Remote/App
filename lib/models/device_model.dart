@@ -20,17 +20,17 @@ class DeviceModel {
 
   DeviceModel(this.idESP, this.id, this.pin, this.deviceName,  this.type, this.isConnected, this.status) {
     switch(type) {
-      case "Light": {
+      case "LIGHT": {
         icon = const FaIcon(Icons.light, color: Colors.white);
         colors = [const Color.fromRGBO(0, 219, 227, 1), const Color.fromRGBO(0, 183, 200, 1)];
         break;
       }
-      case "Fan": {
+      case "FAN": {
         icon = const FaIcon(FontAwesomeIcons.fan, color: Colors.white);
         colors = [const Color.fromRGBO(243, 131, 0, 1), const Color.fromRGBO(227, 55, 0, 1)];
         break;
       }
-      case "Door": {
+      case "DOOR": {
         icon = const FaIcon(FontAwesomeIcons.doorOpen, color: Colors.white);
         colors = [const Color.fromRGBO(144, 77, 255, 1), const Color.fromRGBO(102, 50, 189, 1)];
         break;

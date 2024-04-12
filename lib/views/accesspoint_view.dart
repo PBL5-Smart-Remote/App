@@ -77,6 +77,7 @@ class _AccessPointViewState extends State<AccessPointView> {
                       .then((success) {
                         if(success == true) {
                           kShowSnackBar(context, "Connect successfully");
+                          
                           Navigator.pop(context);
                           showDialog(
                             context: context,

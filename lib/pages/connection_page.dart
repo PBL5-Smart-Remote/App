@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 import 'package:provider/provider.dart';
-import 'package:smart_home_fe/utils/show_snackbar.dart';
 import 'package:smart_home_fe/pages/generic_page.dart';
+import 'package:smart_home_fe/utils/widget/appbar_title.dart';
 import 'package:smart_home_fe/view_models/connection_view_model.dart';
 import 'package:smart_home_fe/views/accesspoint_view.dart';
-import 'package:smart_home_fe/views/appbar_title.dart';
 
 class ConnectionPage extends GenericPage{
   ConnectionPage({super.key}) {

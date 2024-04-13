@@ -1,0 +1,47 @@
+import 'package:smart_home_fe/api/user_api.dart';
+
+class UserService {
+  final userAPI = UserAPI();
+
+  Future<bool> login(String username, String password) async {
+    try {
+      return await userAPI.login(username, password);
+    } catch (err) {
+      print('[UserService][Login]: $err');
+      return false;
+    }
+  }
+
+  Future<bool> verifyToken() async {
+    try {
+      return await userAPI.verifyToken();
+    } catch (err) {
+      print('[UserService][VerifyToken]: $err');
+      return false;
+    }
+  }
+
+  Future<bool> register(
+    String name, 
+    String username, 
+    String password, 
+    String dateofbirth, 
+    String email,
+    String phonenumber) async {
+    try {
+      return await userAPI.register(name, username, password, dateofbirth, email, phonenumber);
+    } catch (err) {
+      print('[UserService][Register]: $err');
+      return false;
+    }
+  }
+
+  Future<bool> changePassword(String password) async {
+    try {
+      return await userAPI.changePassword(password);
+    } catch (err) {
+      print('[UserService][VerifyToken]: $err');
+      return false;
+    }
+  }
+}

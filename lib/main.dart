@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_home_fe/pages/index_page.dart';
+import 'package:smart_home_fe/routes/routes.dart';
 import 'package:smart_home_fe/services/user_service.dart';
 import 'package:smart_home_fe/view_models/connection_view_model.dart';
 import 'package:smart_home_fe/view_models/device_view_model.dart';
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         initialRoute: isValidToken ? '/home': '/login',
+        routes: Routes.init(context),
         debugShowCheckedModeBanner: false,
       ),
     );

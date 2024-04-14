@@ -1,24 +1,30 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:gradient_elevated_button/gradient_elevated_button.dart';
-import 'package:smart_home_fe/services/user_service.dart';
+import 'package:gradient_elevated_button/gradient_elevated_button.dart';import 'package:smart_home_fe/services/user_service.dart';
+import 'package:smart_home_fe/utils/business/date_picker.dart';
 import 'package:smart_home_fe/utils/business/show_alert_dialog.dart';
 import 'package:smart_home_fe/utils/business/validators.dart';
+import 'package:intl/intl.dart';
 import 'package:smart_home_fe/utils/widget/password_text_form_field.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  final _fullnameController = TextEditingController();
   final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _dobController = TextEditingController();
+  final _phonenumberController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _cfpasswordController = TextEditingController();
 
   @override
   void dispose() {
@@ -27,14 +33,28 @@ class _LoginPageState extends State<LoginPage> {
     _passwordController.dispose();
   }
 
-  Future<void> _login(BuildContext context) async {
+  Future<void> _selectDate(BuildContext context) async {
+    final selectedDate = await selectDate(context);
+    if (selectedDate != null) {
+      _dobController.text = DateFormat('dd-MM-yyyy').format(selectedDate);
+    }
+  }
+
+  Future<void> _register(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
+      String fullname = _fullnameController.text;
       String username = _usernameController.text;
+      String email = _emailController.text;
+      String dob = _dobController.text;
+      String phonenumber = _phonenumberController.text;
       String password = _passwordController.text;
-      if (await UserService().login(username, password)) {
-        Navigator.pushReplacementNamed(context, '/home');
+      String cfpassword = _cfpasswordController.text;
+      if (password != cfpassword) {
+        showAlertDialog(context, "Password not match");
+      } else if (await UserService().register(fullname, username, password, dob, email, phonenumber)) {
+        Navigator.pushReplacementNamed(context, '/login');
       } else {
-        showAlertDialog(context, "Incorrect username or password");
+        showAlertDialog(context, "Invalid information");
       }
     }
   }
@@ -48,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           children: [
             Container(
-              height: screenHeight * 0.5,
+              height: screenHeight * 0.4,
               decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage('assets/images/login_bg.png'),
@@ -96,9 +116,9 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Positioned(
                     child: Container(
-                      margin: const EdgeInsets.only(top: 50),
+                      margin: const EdgeInsets.only(top: 100),
                       child: const Center(
-                        child: Text("Login", style: TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold),),
+                        child: Text("Register", style: TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold),),
                       ),
                     ),
                   )
@@ -128,22 +148,66 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       TextFormField(
-                        controller: _usernameController,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
+                        controller: _fullnameController,
+                        validator: validateEmpty,
+                        decoration: const InputDecoration(
+                          label: Text('Full name')
+                        ),
+                      ),
+                      TextFormField(
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        controller: _usernameController,
                         validator: validateEmpty,
                         decoration: const InputDecoration(
                           label: Text('Username')
                         ),
                       ),
+                      TextFormField(
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        controller: _emailController,
+                        validator: validateEmail,
+                        decoration: const InputDecoration(
+                          label: Text('Email')
+                        ),
+                      ),
+                      TextFormField(
+                        readOnly: true,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        controller: _dobController,
+                        validator: validateEmpty,
+                        decoration: const InputDecoration(
+                          label: Text('Date of birth'),
+                          suffixIcon: Icon(
+                            // onPressed: () async => await _selectDate(context),
+                            Icons.date_range,
+                          )
+                        ),
+                        onTap: () async => await _selectDate(context)
+                      ),
+                      TextFormField(
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        controller: _phonenumberController,
+                        validator: validateEmpty,
+                        decoration: const InputDecoration(
+                          label: Text('Phone number')
+                        ),
+                      ),
                       PasswordFormField(
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         controller: _passwordController,
-                        label: const Text('Password'),
                         validator: validateEmpty,
+                        label: const Text("Password"),
+                      ),
+                      PasswordFormField(
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        controller: _cfpasswordController,
+                        validator: validateEmpty,
+                        label: const Text("Confirm password"),
                       ),
                       const SizedBox(height: 15),
                       GradientElevatedButton(
-                        onPressed: () async => _login(context),
+                        onPressed: () async => _register(context),
                         style: GradientElevatedButton.styleFrom(
                           minimumSize: const Size(double.infinity, 40),
                           gradient: const LinearGradient(colors: [
@@ -154,23 +218,23 @@ class _LoginPageState extends State<LoginPage> {
                             end: Alignment.centerLeft,
                           ),
                         ),
-                        child: const Text("Log in", style: TextStyle(color: Colors.white, fontSize: 16,fontWeight: FontWeight.bold))
+                        child: const Text("Register", style: TextStyle(color: Colors.white, fontSize: 16,fontWeight: FontWeight.bold))
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text('Do not have an account? '),
+                          const Text('Already have an account? '),
                           GestureDetector(
                             child: const Text(
-                              'Register',
+                              'Login',
                               style: TextStyle(
                                 color: Color.fromARGB(255, 77, 77, 77),
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
                             onTap: () async {
-                              Navigator.pushReplacementNamed(context, '/register');
+                              Navigator.pushReplacementNamed(context, '/login');
                             },
                           )
                         ],

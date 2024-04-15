@@ -44,4 +44,13 @@ class UserService {
       return false;
     }
   }
+
+  Future<List<String>> getAllUsername() async {
+    try {
+      return await userAPI.getAllUsername();
+    } catch (err) {
+      print('[UserService][GetAllUsername] : $err' );
+      return List.empty();
+    }
+  }
 }

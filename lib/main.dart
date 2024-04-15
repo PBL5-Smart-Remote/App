@@ -15,8 +15,8 @@ void main()  {
 }
 
 class MyApp extends StatelessWidget {
-  final bool isValidToken;
-  const MyApp(this.isValidToken, {super.key});
+  bool isValidToken;
+  MyApp(this.isValidToken, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<ConnectionViewModel>(create: (_) => ConnectionViewModel()),
       ],
       child: MaterialApp(
-        initialRoute: isValidToken ? '/home': '/login',
+        initialRoute: isValidToken ? '/index': '/login',
         routes: Routes.init(context),
         debugShowCheckedModeBanner: false,
       ),

@@ -9,6 +9,7 @@ class UserAPI {
   final String _verifyTokenAPI = '/verifyToken';
   final String _registerAPI = '/register';
   final String _changePasswordAPI = '/changePassword';
+  final String _getAllUsername = '/user/all-username';
 
   Future<bool> login(String username, String password) async {
     try {
@@ -107,6 +108,23 @@ class UserAPI {
     } catch (err) {
       print('[UserAPI][ChangePassword]: $err');
       return false;
+    }
+  }
+  
+  Future<List<String>> getAllUsername() async {
+    try {
+      final response = await http.get(
+        Uri.http(APIConfig.baseServerAppURL, _getAllUsername),
+      );
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return data['usernames'].map((username) => username).toList();
+      } else {
+        return List.empty();
+      }
+    } catch (err) {
+      print('[UserAPI][GetAllUsername]: $err');
+      return List.empty();
     }
   }
 

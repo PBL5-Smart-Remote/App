@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    isValidToken = true;
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<DeviceViewModel>(create: (_) => DeviceViewModel()),

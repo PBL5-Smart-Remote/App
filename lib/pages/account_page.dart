@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:smart_home_fe/config/api_config.dart';
 import 'package:smart_home_fe/pages/generic_page.dart';
 import 'package:smart_home_fe/utils/widget/appbar_title.dart';
 
@@ -16,6 +17,9 @@ class AccountPage extends GenericPage {
 }
 
 class _AccountPageState extends State<AccountPage> {
+  final _serverAppController = TextEditingController(text: APIConfig.baseServerAppURL);
+  final _serverAIController = TextEditingController(text: APIConfig.baseServerAIURL);
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -24,56 +28,92 @@ class _AccountPageState extends State<AccountPage> {
       appBar: AppBar(
         title: const AppBarTitle("Account"),
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Container(                
-                  height: math.max(screenHeight, screenWidth) / 10,
-                  width: math.max(screenHeight, screenWidth) / 10,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: AssetImage('assets/images/user_avatar.png'),
-                      fit: BoxFit.cover,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(                
+                    height: math.max(screenHeight, screenWidth) / 10,
+                    width: math.max(screenHeight, screenWidth) / 10,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: AssetImage('assets/images/user_avatar.png'),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(width: 120),
-                Column(
-                  children: [
-                    Text('Rooms'),
-                    Text('12')
-                  ]
-                ),
-                SizedBox(width: 20),
-                Column(
-                  children: [
-                    Text('Devices'),
-                    Text('15'),
-                  ],
-                ),
-              ],
-            ),
-            SizedBox(height: 10),
-            Text('HuyyCP', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            SizedBox(height: 10),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                 backgroundColor: Colors.blue,
-                 foregroundColor: Colors.white,
-                 minimumSize: Size(double.infinity, 35)
+                  const SizedBox(width: 100),
+                  const Column(
+                    children: [
+                      Text('Rooms', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                      Text('12', style: TextStyle(fontSize: 16))
+                    ]
+                  ),
+                  const SizedBox(width: 30),
+                  const Column(
+                    children: [
+                      Text('Devices', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                      Text('15', style: TextStyle(fontSize: 16)),
+                    ],
+                  ),
+                ],  
               ),
-              onPressed: () {}, 
-              child: Text('Edit user information')
-            )
-          ],
-        )
-      
+              const SizedBox(height: 10),
+              const Text('HuyyCP', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                   backgroundColor: Colors.blue,
+                   foregroundColor: Colors.white,
+                   minimumSize: const Size(double.infinity, 35)
+                ),
+                onPressed: () {}, 
+                child: const Text('Edit user information')
+              ),
+              const SizedBox(width: 10),
+              TextField(
+                controller: _serverAppController,
+                decoration: const InputDecoration(
+                  label: Text('ServerAppURL')
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  APIConfig.baseServerAppURL = _serverAppController.text;
+                },  
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
+                  minimumSize: Size(double.infinity, 35),
+                ),
+                child: Text("Update url")
+              ),
+              TextField(
+                controller: _serverAIController,
+                decoration: const InputDecoration(
+                  label: Text('ServerAIURL')
+                )
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  APIConfig.baseServerAIURL = _serverAIController.text;
+                }, 
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
+                  minimumSize: Size(double.infinity, 35),
+                ),
+                child: Text('Update url')
+              )
+            ],
+          )
+        
+        ),
       )
     );
   }

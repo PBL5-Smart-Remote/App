@@ -7,7 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:smart_home_fe/api/connection_api.dart';
 import 'package:smart_home_fe/models/connection_model.dart';
 import 'package:smart_home_fe/services/connection_service.dart';
-import 'package:smart_home_fe/utils/show_snackbar.dart';
+import 'package:smart_home_fe/utils/business/show_snackbar.dart';
 import 'package:wifi_scan/wifi_scan.dart';
 
 class ConnectionViewModel with ChangeNotifier {
@@ -30,8 +30,7 @@ class ConnectionViewModel with ChangeNotifier {
     try {
       final can = await WiFiScan.instance.canStartScan();
       if (can == CanStartScan.yes) {
-        await WiFiScan.instance.startScan();
-        notifyListeners();
+        WiFiScan.instance.startScan().then((value) => notifyListeners());
       } else {
         kShowSnackBar(context, '$can');
       }

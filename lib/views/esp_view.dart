@@ -17,10 +17,10 @@ class _ESPViewState extends State<ESPView> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        border: const GradientBoxBorder(
-          gradient: LinearGradient(colors: [Colors.blue, Colors.red]),
-        ),
-        borderRadius: BorderRadius.circular(10)
+        // border: const GradientBoxBorder(
+        //   gradient: LinearGradient(colors: [Colors.blue, Colors.red]),
+        // ),
+        // borderRadius: BorderRadius.circular(10)
       ),
       child: GridView.count(
           mainAxisSpacing: 5,

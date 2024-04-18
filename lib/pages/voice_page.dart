@@ -7,7 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_sound_record/flutter_sound_record.dart';
 import 'package:smart_home_fe/pages/generic_page.dart';
 import 'package:smart_home_fe/services/voice_service.dart';
-import 'package:smart_home_fe/views/appbar_title.dart';
+import 'package:smart_home_fe/utils/widget/appbar_title.dart';
 import 'package:path_provider/path_provider.dart';
 
 class VoicePage extends GenericPage {

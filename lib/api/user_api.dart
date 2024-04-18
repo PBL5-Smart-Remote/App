@@ -5,11 +5,11 @@ import 'package:smart_home_fe/config/api_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserAPI {
-  final String _loginAPI = '/login';
-  final String _verifyTokenAPI = '/verifyToken';
-  final String _registerAPI = '/register';
-  final String _changePasswordAPI = '/changePassword';
-  final String _getAllUsername = '/user/all-username';
+  final String _loginAPI = '/users/login';
+  final String _verifyTokenAPI = '/users/verifyToken';
+  final String _registerAPI = '/users/register';
+  final String _changePasswordAPI = '/users/changePassword';
+  final String _getAllUsername = '/users/all-username';
 
   Future<bool> login(String username, String password) async {
     try {
@@ -20,9 +20,10 @@ class UserAPI {
           'password': password
         }
       );
-
+      print(response.statusCode);
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
+        print(data);
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('token', data['token']);
         return true;
@@ -40,6 +41,7 @@ class UserAPI {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('token');
       if(token == null) {
+        print('No token stored');
         return false;
       }
       final response = await http.post(
@@ -51,6 +53,7 @@ class UserAPI {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
+        print(data);
         await prefs.setString("token", data['token']);
         return true;
       } else {
@@ -66,8 +69,8 @@ class UserAPI {
     String name, 
     String username, 
     String password, 
-    String dateofbirth, 
     String email,
+    String dateofbirth, 
     String phonenumber) async {
     try {
       final response = await http.post(
@@ -77,11 +80,11 @@ class UserAPI {
           "username": username,
           "password": password, 
           "email": email,
-          "dateofbirth": dateofbirth,
-          "phonenumber": phonenumber
+          "dateOfBirth": dateofbirth,
+          "phoneNumber": phonenumber
         }
       );
-      return response.statusCode == 200;
+      return response.statusCode == 201;
     } catch (err) {
       print('[UserAPI][Register]: $err');
       return false;
@@ -104,6 +107,7 @@ class UserAPI {
           "password": password
         }
       );
+      print(jsonDecode(response.body));
       return response.statusCode == 200;
     } catch (err) {
       print('[UserAPI][ChangePassword]: $err');

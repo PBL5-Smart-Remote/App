@@ -25,11 +25,11 @@ class UserService {
     String name, 
     String username, 
     String password, 
-    String dateofbirth, 
     String email,
+    String dateofbirth, 
     String phonenumber) async {
     try {
-      return await userAPI.register(name, username, password, dateofbirth, email, phonenumber);
+      return await userAPI.register(name, username, password, email, dateofbirth, phonenumber);
     } catch (err) {
       print('[UserService][Register]: $err');
       return false;

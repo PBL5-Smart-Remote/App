@@ -32,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
       String username = _usernameController.text;
       String password = _passwordController.text;
       if (await UserService().login(username, password)) {
-        Navigator.pushReplacementNamed(context, '/home');
+        Navigator.pushReplacementNamed(context, '/index');
       } else {
         showAlertDialog(context, "Incorrect username or password");
       }
@@ -141,7 +141,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 15),
               GradientElevatedButton(
-                onPressed: () async => _login(context),
+                onPressed: () async => await _login(context),
                 style: GradientElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 40),
                   gradient: const LinearGradient(colors: [

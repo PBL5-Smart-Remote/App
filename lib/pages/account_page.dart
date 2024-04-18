@@ -2,7 +2,9 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:smart_home_fe/config/api_config.dart';
+import 'package:smart_home_fe/models/user_model.dart';
 import 'package:smart_home_fe/pages/generic_page.dart';
+import 'package:smart_home_fe/services/user_service.dart';
 import 'package:smart_home_fe/utils/widget/appbar_title.dart';
 
 class AccountPage extends GenericPage {
@@ -19,6 +21,14 @@ class AccountPage extends GenericPage {
 class _AccountPageState extends State<AccountPage> {
   final _serverAppController = TextEditingController(text: APIConfig.baseServerAppURL);
   final _serverAIController = TextEditingController(text: APIConfig.baseServerAIURL);
+
+  // UserModel user;
+
+  @override
+  void initState() {
+    super.initState();
+    // user = UserService().getUserInfo()
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,14 +76,36 @@ class _AccountPageState extends State<AccountPage> {
               ),
               const SizedBox(height: 10),
               const Text('HuyyCP', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                   backgroundColor: Colors.blue,
-                   foregroundColor: Colors.white,
-                   minimumSize: const Size(double.infinity, 35)
-                ),
-                onPressed: () {}, 
-                child: const Text('Edit user information')
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                         backgroundColor: Colors.blue,
+                         foregroundColor: Colors.white,
+                         minimumSize: const Size(double.infinity, 35)
+                      ),
+                      onPressed: () async {
+                        // await Navigator.pushNamed(context, '/user-info');
+                      }, 
+                      child: const Text('Edit information')
+                    ),
+                  ),
+                  SizedBox(width: 5),
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                         backgroundColor: Colors.blue,
+                         foregroundColor: Colors.white,
+                         minimumSize: const Size(double.infinity, 35)
+                      ),
+                      onPressed: () async {
+                        await Navigator.pushNamed(context, '/change-password');
+                      }, 
+                      child: const Text('Change password')
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(width: 10),
               TextField(

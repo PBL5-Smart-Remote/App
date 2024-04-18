@@ -8,6 +8,7 @@ import 'package:smart_home_fe/view_models/device_view_model.dart';
 import 'package:smart_home_fe/view_models/esp_list_view_model.dart';
 
 void main()  {
+  WidgetsFlutterBinding.ensureInitialized();
   final userService = UserService();
   userService.verifyToken().then(
     (value) => runApp(MyApp(value))
@@ -20,7 +21,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    isValidToken = true;
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<DeviceViewModel>(create: (_) => DeviceViewModel()),

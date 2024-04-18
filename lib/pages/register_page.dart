@@ -51,9 +51,7 @@ class _RegisterPageState extends State<RegisterPage> {
       String cfpassword = _cfpasswordController.text;
       if (password != cfpassword) {
         showAlertDialog(context, "Password not match");
-      } else if ((await UserService().getAllUsername()).contains(username)) {
-
-      } else if (await UserService().register(fullname, username, password, dob, email, phonenumber)) {
+      }  else if (await UserService().register(fullname, username, password, email, dob, phonenumber)) {
         Navigator.pushReplacementNamed(context, '/login');
       } else {
         showAlertDialog(context, "Invalid information");
@@ -158,7 +156,7 @@ class _RegisterPageState extends State<RegisterPage> {
               TextFormField(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 controller: _usernameController,
-                validator: validateUsername,
+                validator: validateEmpty,
                 decoration: const InputDecoration(
                   label: Text('Username')
                 ),
@@ -207,7 +205,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               const SizedBox(height: 15),
               GradientElevatedButton(
-                onPressed: () async => _register(context),
+                onPressed: () async => await _register(context),
                 style: GradientElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 40),
                   gradient: const LinearGradient(colors: [

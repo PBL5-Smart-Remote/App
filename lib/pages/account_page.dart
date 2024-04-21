@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_home_fe/config/api_config.dart';
 import 'package:smart_home_fe/models/user_model.dart';
 import 'package:smart_home_fe/pages/generic_page.dart';
@@ -30,6 +31,16 @@ class _AccountPageState extends State<AccountPage> {
     // user = UserService().getUserInfo()
   }
 
+  Future<void> _logout (BuildContext context) async {
+    try {
+      var prefs = await SharedPreferences.getInstance();
+      await prefs.remove('token');
+      await Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+    } catch (err) {
+      print(err);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -37,6 +48,7 @@ class _AccountPageState extends State<AccountPage> {
     return Scaffold(
       appBar: AppBar(
         title: const AppBarTitle("Account"),
+        actions: [IconButton(onPressed: () async => _logout(context), icon: Icon(Icons.logout))],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -108,23 +120,6 @@ class _AccountPageState extends State<AccountPage> {
                 ],
               ),
               const SizedBox(width: 10),
-              TextField(
-                controller: _serverAppController,
-                decoration: const InputDecoration(
-                  label: Text('ServerAppURL')
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  APIConfig.baseServerAppURL = _serverAppController.text;
-                },  
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  foregroundColor: Colors.white,
-                  minimumSize: Size(double.infinity, 35),
-                ),
-                child: Text("Update url")
-              ),
               TextField(
                 controller: _serverAIController,
                 decoration: const InputDecoration(

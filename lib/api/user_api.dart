@@ -14,7 +14,7 @@ class UserAPI {
   Future<bool> login(String username, String password) async {
     try {
       final response = await http.post(
-        Uri.http(APIConfig.baseServerAppURL, _loginAPI),
+        Uri.https(APIConfig.baseServerAppURL, _loginAPI),
         body: {
           'username': username,
           'password': password
@@ -45,7 +45,7 @@ class UserAPI {
         return false;
       }
       final response = await http.post(
-        Uri.http(APIConfig.baseServerAppURL, _verifyTokenAPI),
+        Uri.https(APIConfig.baseServerAppURL, _verifyTokenAPI),
         headers: {
           "Authorization": token
         }
@@ -74,7 +74,7 @@ class UserAPI {
     String phonenumber) async {
     try {
       final response = await http.post(
-        Uri.http(APIConfig.baseServerAppURL, _registerAPI),
+        Uri.https(APIConfig.baseServerAppURL, _registerAPI),
         body : {
           "name": name, 
           "username": username,
@@ -99,7 +99,7 @@ class UserAPI {
         return false;
       }
       final response = await http.patch(
-        Uri.http(APIConfig.baseServerAppURL, _changePasswordAPI),
+        Uri.https(APIConfig.baseServerAppURL, _changePasswordAPI),
         headers: {
           "Authorization" : token
         },
@@ -118,7 +118,7 @@ class UserAPI {
   Future<List<String>> getAllUsername() async {
     try {
       final response = await http.get(
-        Uri.http(APIConfig.baseServerAppURL, _getAllUsername),
+        Uri.https(APIConfig.baseServerAppURL, _getAllUsername),
       );
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);

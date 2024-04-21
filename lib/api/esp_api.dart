@@ -14,12 +14,12 @@ class ESPAPI {
       // var prefs = await SharedPreferences.getInstance();
       // var token = prefs.getString('token');
       final response = await http.get(
-        Uri.http(APIConfig.baseServerAppURL, _getESPsAPI),
+        Uri.https(APIConfig.baseServerAppURL, _getESPsAPI),
         // headers: {
         //   "Authorization": token!
         // },
       );
-      print(Uri.http(APIConfig.baseServerAppURL, _getESPsAPI).toString());
+      print(Uri.https(APIConfig.baseServerAppURL, _getESPsAPI).toString());
       if(response.statusCode == 200) {
         final data = jsonDecode(response.body);
         print(data);

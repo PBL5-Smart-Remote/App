@@ -135,14 +135,15 @@ class _VoicePageState extends State<VoicePage> {
 
   Future<String> _sendVoice() async {
     final directory = await getApplicationDocumentsDirectory();
-    final wavFilePath = '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.wav';
-
+    // final wavFilePath = '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.wav';
+    final wavFilePath = voicePath!.substring(0, voicePath!.length - 3) + 'wav';
     // Copy the recorded audio file to a new WAV file
-    // await File(voicePath!).copy(wavFilePath);
-    print(voicePath);
+    await File(voicePath!).copy(wavFilePath);
+    print(wavFilePath);
+
     // voicePath = wavFilePath;
     // print(voicePath);
 
-    return await voiceService.sendVoice(voicePath!);
+    return await voiceService.sendVoice(wavFilePath);
   }
 }

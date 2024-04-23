@@ -12,8 +12,11 @@ class DeviceViewModel with ChangeNotifier {
       notifyListeners();
       return true;
     } catch (err) {
-      print('[DeviceListViewModel][ChangeStatus]: $err');
+      print('[DeviceViewModel][ChangeStatus]: $err');
       return false;
     }
   }
+
+
+  // update info device(room, type)
 }

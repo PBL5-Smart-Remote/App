@@ -47,10 +47,14 @@ class _RoomViewState extends State<RoomView> {
           ],
         ),
       ),
-      onLongPress: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return RoomDevicesPage(widget.room.roomName);
-        }));
+      onLongPress: () async {
+        await Navigator.pushNamed(
+          context, 
+          '/room',
+          arguments: {
+            'id': widget.room.roomID
+          }
+        );
       },
     );
   }

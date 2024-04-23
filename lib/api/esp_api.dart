@@ -24,17 +24,19 @@ class ESPAPI {
         final data = jsonDecode(response.body);
         print(data);
         return List<ESPModel>.from(data.map((esp) => ESPModel(
-          esp['_id'],
-          esp['_idESP'],
-          esp['isConnected'],
+          esp['_id'] ?? '',
+          esp['_idESP'] ?? '',
+          esp['isConnected'] ?? false,
           List<DeviceModel>.from(esp['devices'].map((device) => DeviceModel(
-            esp['_idESP'],
-            device['_id'],
-            device['pin'],
-            device['name'],
-            device['type'],
-            device['isConnected'],
-            device['status']
+            esp['_idESP'] ?? '',
+            device['_id'] ?? '',
+            device['pin'] ?? '',
+            device['idRoom'] ?? '',
+            device['roomName'] ?? '',
+            device['name'] ?? '',
+            device['type'] ?? '',
+            device['isConnected'] ?? false,
+            device['status'] ?? 0
           ))
         ))));
       } else {

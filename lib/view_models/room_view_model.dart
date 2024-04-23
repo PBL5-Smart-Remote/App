@@ -23,5 +23,12 @@ class RoomViewModel with ChangeNotifier {
     }
   }
 
+  void clearData() {
+    try {
+      _room = null;
+    } catch (err) {
+      print('[RoomViewModel][ClearData]: $err');
+    }
+  }
   // add device
 }

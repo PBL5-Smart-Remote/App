@@ -54,13 +54,13 @@ class RoomAPI {
           room['_id'],
           room['name'],
           List<DeviceModel>.from(room['devices'].map((device) => DeviceModel(
-            device['_idESP'],
-            device['_id'],
-            device['pin'],
-            device['name'],
-            device['type'],
-            device['isConnected'],
-            device['status']
+            device['_idESP'] ?? '',
+            device['_id'] ?? '',
+            device['pin'] ?? '',
+            device['name'] ?? '_no_name_',
+            device['type'] ?? '',
+            device['isConnected'] ?? false,
+            device['status'] ?? 0
           )))
         );
       } else {

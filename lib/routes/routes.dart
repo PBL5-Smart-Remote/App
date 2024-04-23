@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:smart_home_fe/pages/edit_device_page.dart';
 import 'package:smart_home_fe/pages/index_page.dart';
 import 'package:smart_home_fe/pages/room_devices_page.dart';
 
@@ -11,6 +12,7 @@ class Routes {
     _route = {
       '/room': (context) => RoomDevicesPage(),
       '/index': (context) => IndexPage(),
+      '/edit-device': (context) => EditDevicePage(),
     };
     return _route;
   }

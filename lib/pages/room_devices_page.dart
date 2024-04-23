@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_home_fe/view_models/room_view_model.dart';
 import 'package:smart_home_fe/views/appbar_title.dart';
+import 'package:smart_home_fe/views/device_view.dart';
 import 'package:smart_home_fe/views/figure_icon_view.dart';
 
 class RoomDevicesPage extends StatefulWidget {
@@ -50,6 +51,16 @@ class _RoomDevicesPageState extends State<RoomDevicesPage> {
                         ],
                       )
                     ),
+                    SizedBox(height: 30),
+                    Expanded(
+                      child: GridView.count(
+                        mainAxisSpacing: 5,
+                        crossAxisSpacing: 5,
+                        crossAxisCount: 2,
+                        physics: const BouncingScrollPhysics(),
+                        children:roomViewModel.room!.deviceList.map((device) => DeviceView(device, isEditable: true)).toList()
+                      ),
+                    )
                   ],
                 ),
               )

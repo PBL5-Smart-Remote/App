@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+
 import 'package:provider/provider.dart';
 import 'package:smart_home_fe/view_models/room_view_model.dart';
-import 'package:smart_home_fe/views/appbar_title.dart';
 import 'package:smart_home_fe/views/device_view.dart';
-import 'package:smart_home_fe/views/figure_icon_view.dart';
+import 'package:smart_home_fe/utils/widget/appbar_title.dart';
+import 'package:smart_home_fe/utils/widget/figure_icon_view.dart';
 
 class RoomDevicesPage extends StatefulWidget {
   RoomDevicesPage({super.key});

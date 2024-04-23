@@ -11,7 +11,7 @@ class ConnectionAPI {
       // var prefs = await SharedPreferences.getInstance();
       // var token = prefs.getString('iduser');
       final response = await http.post(
-        Uri.http(APIConfig.baseEspURL, _setupAPI),
+        Uri.https(APIConfig.baseEspURL, _setupAPI),
         // headers: {
         //   "Authorization": token!
         // },

@@ -15,14 +15,14 @@ class VoiceAPI {
       // var prefs = await SharedPreferences.getInstance();
       // var token = prefs.getString('token');
       // final voiceFile = File(voicePath);
-
+      print(voicePath);
       var request = http.MultipartRequest('POST', Uri.https(APIConfig.baseServerAIURL, _sendVoiceAPI));
 
       // Add file
       var file = await http.MultipartFile.fromPath(
         'audio',
         voicePath,
-        contentType: MediaType('audio', 'm4a'),
+        contentType: MediaType('audio', 'x-wav'),
       );
       request.files.add(file);
 

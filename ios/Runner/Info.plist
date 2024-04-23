@@ -46,6 +46,8 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>XXXXXX</string>
+	<string>LocationRequired</string>
+	<key>NSMicrophoneUsageDescription</key>
+    <string>Some message to describe why you need this permission</string>
 </dict>
 </plist>

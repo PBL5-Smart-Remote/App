@@ -2,7 +2,7 @@ import 'package:smart_home_fe/api/esp_api.dart';
 import 'package:smart_home_fe/models/esp_model.dart';
 
 class ESPService {
-  ESPAPI espAPI = ESPAPI();
+  final espAPI = ESPAPI();
 
   Future<List<ESPModel>> getESPs() async {
     try {

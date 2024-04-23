@@ -5,7 +5,7 @@ import 'package:smart_home_fe/models/device_control_model.dart';
 import 'package:smart_home_fe/models/device_model.dart';
 
 class DeviceService {
-  final DeviceAPI deviceAPI = DeviceAPI();
+  final deviceAPI = DeviceAPI();
 
   Future<bool> changeStatus(DeviceControlModel device) async {
     try {

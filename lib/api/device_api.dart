@@ -13,7 +13,7 @@ class DeviceAPI {
       // var prefs = await SharedPreferences.getInstance();
       // var token = prefs.getString('token');
       final response = await http.post(
-        Uri.http(APIConfig.baseServerAppURL, '$_changeStatusAPI/${model.idESP}'),
+        Uri.https(APIConfig.baseServerAppURL, '$_changeStatusAPI/${model.idESP}'),
         headers: {
           // "Authorization": token!,
           "Content-Type": "application/json",

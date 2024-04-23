@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_home_fe/views/appbar_title.dart';
+import 'package:smart_home_fe/utils/widget/appbar_title.dart';
 
 class EditDevicePage extends StatefulWidget {
   const EditDevicePage({super.key});

@@ -60,6 +60,7 @@ class _VoicePageState extends State<VoicePage> {
       setState(() {
         _isRecording = isRecording;
         _recordDuration = 0;
+        label = '';
       });
       if (_isRecording) _startTimer();
     } catch (e) {
@@ -108,10 +109,11 @@ class _VoicePageState extends State<VoicePage> {
                   }, 
                   icon: const Icon(Icons.send)
                 ),
+                const SizedBox(width: 10),
                 _buildText()
               ],
             ),
-            Text(label),
+            if (_recordState == RecordState.stop) Text(label),
           ],
         ),
       )

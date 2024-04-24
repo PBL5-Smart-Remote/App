@@ -22,4 +22,13 @@ class RoomService {
       return null;
     }
   }
+
+  Future<List<(String, String)>> getRoomsInfo() async {
+    try {
+      return await roomAPI.getAllRoomInfo();
+    } catch (err) { 
+      print('[RoomService][GetRoomsInfo]: $err');
+      return List.empty();
+    }
+  }
 }

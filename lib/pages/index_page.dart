@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_home_fe/pages/account_page.dart';
 import 'package:smart_home_fe/pages/connection_page.dart';
 import 'package:smart_home_fe/pages/home_page.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:smart_home_fe/pages/voice_page.dart';
+import 'package:smart_home_fe/view_models/device_view_model.dart';
 
 class IndexPage extends StatefulWidget {
   const IndexPage({super.key});
@@ -32,6 +34,7 @@ class _IndexPageState extends State<IndexPage> {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<DeviceViewModel>(context, listen: false).initDeviceInfo();
     return Scaffold(
       body: PageView(
         controller: _pageController,

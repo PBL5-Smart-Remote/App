@@ -6,6 +6,7 @@ import 'package:smart_home_fe/view_models/room_view_model.dart';
 import 'package:smart_home_fe/views/device_view.dart';
 import 'package:smart_home_fe/utils/widget/appbar_title.dart';
 import 'package:smart_home_fe/utils/widget/figure_icon_view.dart';
+import 'package:smart_home_fe/views/sensor_view.dart';
 
 class RoomDevicesPage extends StatefulWidget {
   RoomDevicesPage({super.key});
@@ -34,24 +35,7 @@ class _RoomDevicesPageState extends State<RoomDevicesPage> {
                 ),
                 child: Column(
                   children: [
-                    Container(
-                      height: 60,
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: Colors.white
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          FigureIconView(Icon(Icons.water_drop, color: Colors.blue[300]), "humidity", "75%"),
-                          VerticalDivider(thickness: 1, width: 1, color: Colors.grey[200]),
-                          FigureIconView(Icon(Icons.electric_bolt_rounded, color: Colors.blue[900]), "energy", "60kwh"),
-                          VerticalDivider(thickness: 1, width: 1, color: Colors.grey[200]),
-                          FigureIconView(Icon(Icons.thermostat_rounded, color: Colors.amber[900]), "temp", "24°C")
-                        ],
-                      )
-                    ),
+                    SensorView(),
                     SizedBox(height: 30),
                     Expanded(
                       child: GridView.count(

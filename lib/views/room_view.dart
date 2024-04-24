@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_home_fe/models/room_brief_model.dart';
 import 'package:smart_home_fe/pages/room_devices_page.dart';
+import 'package:smart_home_fe/view_models/room_view_model.dart';
 
 class RoomView extends StatefulWidget {
   late RoomBriefModel room;
@@ -47,14 +49,14 @@ class _RoomViewState extends State<RoomView> {
           ],
         ),
       ),
-      onLongPress: () async {
-        await Navigator.pushNamed(
+      onLongPress: () {
+        Navigator.pushNamed(
           context, 
           '/room',
           arguments: {
             'id': widget.room.roomID
           }
-        );
+        ).then((value) => Provider.of<RoomViewModel>(context, listen: false).clearData());
       },
     );
   }

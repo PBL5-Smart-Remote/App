@@ -19,7 +19,8 @@ class _DeviceViewState extends State<DeviceView> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onLongPress: widget.isEditable 
-      ? () async => await Navigator.pushNamed(context, '/edit-device', arguments: {'id': widget.device.id})
+      ? () => Navigator.pushNamed(context, '/edit-device', arguments: {'id': widget.device.id})
+              .then((value) => Provider.of<DeviceViewModel>(context, listen: false).clearData())
       : null,
       child: Container(
         padding: const EdgeInsets.all(10),

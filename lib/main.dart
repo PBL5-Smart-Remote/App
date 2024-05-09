@@ -5,7 +5,7 @@ import 'package:smart_home_fe/routes/routes.dart';
 import 'package:smart_home_fe/services/user_service.dart';
 import 'package:smart_home_fe/view_models/connection_view_model.dart';
 import 'package:smart_home_fe/view_models/device_view_model.dart';
-import 'package:smart_home_fe/view_models/esp_list_view_model.dart';
+import 'package:smart_home_fe/view_models/device_list_view_model.dart';
 import 'package:smart_home_fe/view_models/room_list_view_model.dart';
 import 'package:smart_home_fe/view_models/room_view_model.dart';
 
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<DeviceViewModel>(create: (_) => DeviceViewModel()),
-        ChangeNotifierProvider<ESPListViewModel>(create: (_) => ESPListViewModel()),
+        ChangeNotifierProvider<DeviceListViewModel>(create: (_) => DeviceListViewModel()),
         ChangeNotifierProvider<ConnectionViewModel>(create: (_) => ConnectionViewModel()),
         ChangeNotifierProvider<RoomListViewModel>(create: (_) => RoomListViewModel()),
         ChangeNotifierProvider<RoomViewModel>(create: (_) => RoomViewModel()), 

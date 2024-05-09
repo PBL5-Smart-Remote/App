@@ -4,7 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:smart_home_fe/pages/generic_page.dart';
 import 'package:smart_home_fe/utils/widget/appbar_title.dart';
 import 'package:smart_home_fe/utils/widget/figure_icon_view.dart';
-import 'package:smart_home_fe/views/esp_list_view.dart';
+import 'package:smart_home_fe/views/device_list_view.dart';
 import 'package:smart_home_fe/views/room_list_view.dart';
 import 'package:smart_home_fe/views/sensor_view.dart';
 
@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   final List<Widget> _tabViews = [
     const RoomListView(),
-    const ESPListView(),
+    const DeviceListView(),
   ];
 
   @override

@@ -3,13 +3,15 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:smart_home_fe/config/api_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smart_home_fe/models/user_model.dart';
 
 class UserAPI {
   final String _loginAPI = '/users/login';
   final String _verifyTokenAPI = '/users/verifyToken';
   final String _registerAPI = '/users/register';
   final String _changePasswordAPI = '/users/changePassword';
-  final String _getAllUsername = '/users/all-username';
+  final String _getAllUsernameAPI = '/users/all-username';
+  final String _getUserInfoAPI = '/users';
 
   Future<bool> login(String username, String password) async {
     try {
@@ -55,6 +57,7 @@ class UserAPI {
         final data = jsonDecode(response.body);
         print(data);
         await prefs.setString("token", data['token']);
+        
         return true;
       } else {
         return false;
@@ -118,7 +121,7 @@ class UserAPI {
   Future<List<String>> getAllUsername() async {
     try {
       final response = await http.get(
-        Uri.https(APIConfig.baseServerAppURL, _getAllUsername),
+        Uri.https(APIConfig.baseServerAppURL, _getAllUsernameAPI),
       );
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
@@ -132,4 +135,27 @@ class UserAPI {
     }
   }
 
+  Future<UserModel?> getUserInfo(String id) async {
+    try {
+      final response = await http.get(
+        Uri.https(APIConfig.baseServerAppURL, '$_getUserInfoAPI/$id')
+      );
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        print(data);
+        return UserModel(
+          data['_id'],
+          data['name'],
+          data['email'],
+          data['dob'],
+          data['phoneNumber']
+        );
+      } else {
+        return null;
+      }
+    } catch (err) {
+      print('[UserAPI][GetUserInfo]: $err');
+      return null;
+    }
+  }
 }

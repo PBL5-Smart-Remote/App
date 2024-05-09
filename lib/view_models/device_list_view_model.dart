@@ -9,17 +9,17 @@ import 'package:smart_home_fe/models/esp_model.dart';
 import 'package:smart_home_fe/services/device_service.dart';
 import 'package:smart_home_fe/services/esp_service.dart';
 
-class ESPListViewModel with ChangeNotifier{
-  final ESPService _espService = ESPService();
+class DeviceListViewModel with ChangeNotifier{
+  final DeviceService _deviceService = DeviceService();
   
-  List<ESPModel> _esps = List.empty();
+  List<DeviceModel> _devices = List.empty();
 
-  List<ESPModel> get esps => _esps;
+  List<DeviceModel> get devices => _devices;
 
-  Future<void> getESPs() async {
+  Future<void> getDevices() async {
     try {
-      _espService.getESPs().then((esps) {
-        _esps = esps;
+      _deviceService.getAllDevices().then((devices) {
+        _devices = devices;
         notifyListeners();
       });
     } catch (err) {

@@ -35,8 +35,8 @@ class _RoomDevicesPageState extends State<RoomDevicesPage> {
                 ),
                 child: Column(
                   children: [
-                    SensorView(),
-                    SizedBox(height: 30),
+                    const SensorView(),
+                    const SizedBox(height: 30),
                     Expanded(
                       child: GridView.count(
                         mainAxisSpacing: 5,

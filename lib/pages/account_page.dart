@@ -20,7 +20,7 @@ class AccountPage extends GenericPage {
 }
 
 class _AccountPageState extends State<AccountPage> {
-  final _serverAppController = TextEditingController(text: APIConfig.baseServerAppURL);
+  final _serverFirmwareController = TextEditingController(text: APIConfig.baseServerFirmwareURL);
   final _serverAIController = TextEditingController(text: APIConfig.baseServerAIURL);
 
   // UserModel user;
@@ -129,6 +129,23 @@ class _AccountPageState extends State<AccountPage> {
               ElevatedButton(
                 onPressed: () {
                   APIConfig.baseServerAIURL = _serverAIController.text;
+                }, 
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
+                  minimumSize: Size(double.infinity, 35),
+                ),
+                child: Text('Update url')
+              ),
+              TextField(
+                controller: _serverFirmwareController,
+                decoration: const InputDecoration(
+                  label: Text('ServerFirmwareURL')
+                )
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  APIConfig.baseServerFirmwareURL = _serverFirmwareController.text;
                 }, 
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,

@@ -8,6 +8,15 @@ import 'package:smart_home_fe/models/device_update_model.dart';
 class DeviceService {
   final deviceAPI = DeviceAPI();
 
+  Future<List<DeviceModel>> getAllDevices() async {
+    try {
+      return await deviceAPI.getAllDevices();
+    } catch (err) {
+      print('[DeviceService][GetAllDevices]: $err');
+      return List.empty();
+    }
+  }
+
   Future<bool> changeStatus(DeviceControlModel device) async {
     try {
       return await deviceAPI.changeStatus(device);

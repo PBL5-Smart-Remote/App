@@ -66,7 +66,7 @@ class _DeviceViewState extends State<DeviceView> {
                       inactiveTrackColor: Colors.grey[300],
                       onChanged: (value) async {
                         final newStatus = value ? 1 : 0;
-                        await deviceViewModel.changeStatus(DeviceControlModel(widget.device.idESP, widget.device.id, newStatus));
+                        await deviceViewModel.changeStatus(DeviceControlModel(widget.device.id, newStatus));
                         setState(() {
                           widget.device.status = newStatus;
                         });

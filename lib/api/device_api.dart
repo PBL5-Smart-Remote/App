@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:smart_home_fe/config/api_config.dart';
 import 'package:smart_home_fe/models/device_control_model.dart';
@@ -8,17 +9,47 @@ import 'package:smart_home_fe/models/device_model.dart';
 import 'package:smart_home_fe/models/device_update_model.dart';
 
 class DeviceAPI {
-  final String _changeStatusAPI = '/esps';
-  final String _getDeviceInfo = '/device';
-  final String _getDevicesType = '/devices/type';
+  final String _getDevice = '/devices';
+  final String _changeStatusAPI = '/devices/changeStatus';
   final String _updateDevice = '/devices/update';
+  final String _getDevicesType = '/devices/type';
+  final dio = Dio();
+  Future<List<DeviceModel>> getAllDevices() async {
+    try {
+      final response = await dio.get(
+        Uri.http(APIConfig.baseServerFirmwareURL, '$_getDevice/allDevices').toString(),
+      );
+      if (response.statusCode == 200) {
+        final data = response.data;
+        print(data);
+        return List.from(data.map((device) => DeviceModel(
+          device['ESP'] ?? '',
+          device['_id'] ?? '',
+          device['pin'] ?? '',
+          device['room']['_id'] ?? '',
+          device['room']['name'] ?? '', 
+          device['name'] ?? '',
+          device['type'] ?? '',
+          device['isConnected'] ?? false,
+          device['status'] ?? 0
+        )));
+      } else {
+        return List.empty();
+      }
+    } catch (err) {
+      print('[DeviceAPI][GetAllDevices]: $err');
+      return List.empty();
+    }
+  }
 
   Future<bool> changeStatus(DeviceControlModel model) async {
     try {
       // var prefs = await SharedPreferences.getInstance();
       // var token = prefs.getString('token');
+      var url = APIConfig.baseServerFirmwareURL + _changeStatusAPI;
+      print(url);
       final response = await http.post(
-        Uri.https(APIConfig.baseServerAppURL, '$_changeStatusAPI/${model.idESP}'),
+        Uri.http(APIConfig.baseServerFirmwareURL, _changeStatusAPI),
         headers: {
           // "Authorization": token!,
           "Content-Type": "application/json",
@@ -26,13 +57,14 @@ class DeviceAPI {
         body: jsonEncode({
           "devices": [
             {
-              "id": model.idDevice,
+              "_id": model.idDevice,
               "status": (model.status == 1 ? "on" : "off")
             }
           ]
         })
       );
-      return response.statusCode ~/ 100 == 2;
+      
+      return response.statusCode == 200;
     } catch (err) {
       print('[DeviceAPI][ChangeStatus]: $err');
       return false;
@@ -44,7 +76,7 @@ class DeviceAPI {
       // var prefs = await SharedPreferences.getInstance();
       // var token = prefs.getString('token');
       final response = await http.get(
-        Uri.https(APIConfig.baseServerAppURL, _getDeviceInfo, {'id': id}),
+        Uri.https(APIConfig.baseServerFirmwareURL, '$_getDevice/$id'),
         headers: {
           // "Authorization": token!,
         },
@@ -62,6 +94,8 @@ class DeviceAPI {
           data['isConnected'] ?? false,
           data['status'] ?? 0
         );
+      } else {
+        return null;
       }
     } catch (err) { 
       print('[DeviceAPI][GetDeviceInfo]: $err');
@@ -74,7 +108,7 @@ class DeviceAPI {
       // var prefs = await SharedPreferences.getInstance();
       // var token = prefs.getString('token');
       final response = await http.get(
-        Uri.https(APIConfig.baseServerAppURL, _getDevicesType),
+        Uri.https(APIConfig.baseServerFirmwareURL, _getDevicesType),
         // headers: {
         //   "Authorization": token!
         // },
@@ -104,7 +138,7 @@ class DeviceAPI {
           'id': device.id,
           'name': device.name,
           'type': device.type,
-          'idRoom': device.idRoom,
+          // 'idRoom': device.idRoom,
         }
       );
       return response.statusCode == 200;

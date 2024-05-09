@@ -1,4 +1,5 @@
 import 'package:smart_home_fe/api/user_api.dart';
+import 'package:smart_home_fe/models/user_model.dart';
 
 class UserService {
   final userAPI = UserAPI();
@@ -51,6 +52,15 @@ class UserService {
     } catch (err) {
       print('[UserService][GetAllUsername] : $err' );
       return List.empty();
+    }
+  }
+
+  Future<UserModel?> getUserInfo(String id) async {
+    try {
+      return await userAPI.getUserInfo(id);
+    } catch (err) {
+      print('[UserService][GetUserInfo] : $err' );
+      return null;
     }
   }
 }

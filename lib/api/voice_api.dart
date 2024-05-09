@@ -22,6 +22,8 @@ class VoiceAPI {
 
       final formData = FormData.fromMap({
         'audio': file,
+        'idRoom': '65dc45b34c0e55a017e5dd78'
+
       });
 
       final response = await dio.post(

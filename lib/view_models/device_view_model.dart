@@ -34,9 +34,8 @@ class DeviceViewModel with ChangeNotifier {
       // roomsInfo = await _roomService.getRoomsInfo();
       deviceLabels = await _deviceService.getLabelByDeviceType(type);
       print(deviceLabels);
-      notifyListeners();
+      // notifyListeners();
 
-      print('call labels');
       // _deviceService.getLabelByDeviceType(type).then((value)  {
       //   deviceLabels = value;
       //   print(deviceLabels);
@@ -66,7 +65,6 @@ class DeviceViewModel with ChangeNotifier {
       _device = await _deviceService.getDeviceInfo(id);
       print(_device);
       notifyListeners();
-      print('call device');
     } catch (err) {
       print('[DeviceViewModel][GetDeviceInfo]: $err');
     }

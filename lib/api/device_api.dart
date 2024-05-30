@@ -25,14 +25,14 @@ class DeviceAPI {
         final data = response.data;
         print(data);
         return List.from(data.map((device) => DeviceModel(
-          device['ESP'] ?? '',
+          device['ESP']['_idESP'] ?? '',
           device['_id'] ?? '',
           device['pin'] ?? '',
           device['room']['_id'] ?? '',
           device['room']['name'] ?? '', 
           device['name'] ?? 'no_name',
-          device['idDeviceLabel'] ?? '', 
-          device['deviceLabel'] ?? '',
+          device['label']['_id'] ?? '', 
+          device['label']['label'] ?? '',
           device['type'] ?? '',
           device['isConnected'] ?? false,
           device['status'] ?? 0
@@ -53,13 +53,13 @@ class DeviceAPI {
       var url = APIConfig.baseServerFirmwareURL + _changeStatusAPI;
       print(url);
       final response = await http.post(
-        Uri.http(APIConfig.baseServerFirmwareURL, _changeStatusAPI),
+        Uri.https(APIConfig.baseServerFirmwareURL, _changeStatusAPI),
         headers: {
           // "Authorization": token!,
           "Content-Type": "application/json",
         },
         body: jsonEncode({
-          "devices": [
+          "devices": [ 
             {
               "_id": model.idDevice,
               "status": (model.status == 1 ? "on" : "off")
@@ -67,7 +67,7 @@ class DeviceAPI {
           ]
         })
       );
-      
+      print(response.statusCode);
       return response.statusCode == 200;
     } catch (err) {
       print('[DeviceAPI][ChangeStatus]: $err');
@@ -89,14 +89,14 @@ class DeviceAPI {
         final device = jsonDecode(response.body);
         // print(device);
         return DeviceModel(
-          device['idESP'] ?? '', 
+          device['ESP']['_idESP'] ?? '', 
           device['_id'] ?? '',
           device['pin'] ?? '',
-          device['idRoom'] ?? '',
-          device['roomName'] ?? '',
-          device['deviceName'] ?? 'no_name',
-          device['idDeviceLabel'] ?? '',
-          device['deviceLabel'] ?? '',
+          device['room']['_id'] ?? '',
+          device['room']['name'] ?? '',
+          device['name'] ?? 'no_name',
+          device['label']['_id'] ?? '',
+          device['label']['label'] ?? '',
           device['type'] ?? '',
           device['isConnected'] ?? false,
           device['status'] ?? 0
@@ -137,12 +137,11 @@ class DeviceAPI {
       // var prefs = await SharedPreferences.getInstance();
       // var token = prefs.getString('token');
       final response = await http.put(
-        Uri.https(APIConfig.baseServerAppURL, _updateDevice),
+        Uri.https(APIConfig.baseServerFirmwareURL, '$_updateDevice/${device.id}'),
         // headers: {
         //   "Authorization": token!
         // },
         body: {
-          'id': device.id,
           'name': device.name,
           'label': device.idLabel,
           // 'idRoom': device.idRoom,

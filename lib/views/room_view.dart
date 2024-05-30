@@ -41,7 +41,7 @@ class _RoomViewState extends State<RoomView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(widget.room.roomName, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+                  Text(widget.room.roomName, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
                   Text("${widget.room.numDevices} devices, ${widget.room.numConnected} connected", style: TextStyle(color: Colors.grey[600]))
                 ],
               ),

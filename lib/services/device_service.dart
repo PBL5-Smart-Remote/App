@@ -2,6 +2,7 @@ import 'package:smart_home_fe/api/device_api.dart';
 import 'package:smart_home_fe/api/esp_api.dart';
 import 'package:smart_home_fe/api/room_api.dart';
 import 'package:smart_home_fe/models/device_control_model.dart';
+import 'package:smart_home_fe/models/device_label_model.dart';
 import 'package:smart_home_fe/models/device_model.dart';
 import 'package:smart_home_fe/models/device_update_model.dart';
 
@@ -49,6 +50,15 @@ class DeviceService {
     } catch (err) {
       print('[DeviceService][UpdateDeviceInfo]: $err');
       return false;
+    }
+  }
+
+  Future<List<DeviceLabelModel>> getLabelByDeviceType(String type) async {
+    try {
+      return await deviceAPI.getLabelByDeviceType(type);
+    } catch (err) {
+      print('[DeviceService][GetLabelByDeviceType]: $err');
+      return List.empty();
     }
   }
 }

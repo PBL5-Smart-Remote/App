@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:smart_home_fe/models/device_label_model.dart';
 
 enum DeviceStatus {
   off,
@@ -28,6 +29,7 @@ class DeviceModel {
   String idRoom;
   String roomName;
   String deviceName;
+  DeviceLabelModel label = DeviceLabelModel('', 'no_label', '');
   String type;
   bool isConnected;
   int status;
@@ -35,8 +37,9 @@ class DeviceModel {
   List<Color> colors = [Colors.grey[200]!, Colors.grey[300]!];
 
 
-  DeviceModel(this.idESP, this.id, this.pin, this.idRoom, this.roomName, this.deviceName,  this.type, this.isConnected, this.status) {
+  DeviceModel(this.idESP, this.id, this.pin, this.idRoom, this.roomName, this.deviceName, idDeviceLabel, deviceLabel, this.type, this.isConnected, this.status) {
     icon = deviceType[type]['icon'];
     colors = deviceType[type]['colors'];
+    label = DeviceLabelModel(idDeviceLabel, deviceLabel, type);  
   }
 }

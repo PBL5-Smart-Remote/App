@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:smart_home_fe/models/device_control_model.dart';
+import 'package:smart_home_fe/models/device_label_model.dart';
 import 'package:smart_home_fe/models/device_model.dart';
 import 'package:smart_home_fe/models/device_update_model.dart';
 import 'package:smart_home_fe/services/device_service.dart';
@@ -14,8 +15,8 @@ class DeviceViewModel with ChangeNotifier {
 
   DeviceModel? get device => _device;
 
-  List<String> deviceTypes = List.empty(growable: true);
-  List<(String, String)> roomsInfo = List.empty(growable: true);
+  List<DeviceLabelModel> deviceLabels = List.empty(growable: true);
+  // List<(String, String)> roomsInfo = List.empty(growable: true);
 
   Future<bool> changeStatus(DeviceControlModel device) async {
     try {
@@ -28,10 +29,20 @@ class DeviceViewModel with ChangeNotifier {
     }
   }
 
-  Future<void> initDeviceInfo() async {
+  Future<void> getDeviceLabels(String type) async {
     try {
-      deviceTypes = await _deviceService.getDeviceTypes();
-      roomsInfo = await _roomService.getRoomsInfo();
+      // roomsInfo = await _roomService.getRoomsInfo();
+      deviceLabels = await _deviceService.getLabelByDeviceType(type);
+      print(deviceLabels);
+      notifyListeners();
+
+      print('call labels');
+      // _deviceService.getLabelByDeviceType(type).then((value)  {
+      //   deviceLabels = value;
+      //   print(deviceLabels);
+      //   getDeviceInfo(id);
+      //   notifyListeners();
+      // });
     } catch (err) {
       print('[DeviceViewModel][InitDeviceInfo]: $err');
     }
@@ -47,10 +58,15 @@ class DeviceViewModel with ChangeNotifier {
 
   Future<void> getDeviceInfo(String id) async {
     try {
-      _deviceService.getDeviceInfo(id).then((value) {
-        _device = value;
-        notifyListeners();
-      });
+      // _deviceService.getDeviceInfo(id).then((value) {
+      //   print(value);
+      //   _device = value;
+      // notifyListeners();
+      // });
+      _device = await _deviceService.getDeviceInfo(id);
+      print(_device);
+      notifyListeners();
+      print('call device');
     } catch (err) {
       print('[DeviceViewModel][GetDeviceInfo]: $err');
     }
@@ -64,4 +80,5 @@ class DeviceViewModel with ChangeNotifier {
       return false;
     }
   }
+
 }

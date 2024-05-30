@@ -63,6 +63,8 @@ class RoomAPI {
             room['_id'] ?? '',
             room['name'] ?? '',
             device['name'] ?? 'no_name',
+            device['idDeviceLabel'] ?? '', 
+            device['deviceLabel'] ?? '',
             device['type'] ?? '',
             device['isConnected'] ?? false,
             device['status'] ?? 0

@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:smart_home_fe/config/api_config.dart';
 import 'package:smart_home_fe/models/device_control_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smart_home_fe/models/device_label_model.dart';
 import 'package:smart_home_fe/models/device_model.dart';
 import 'package:smart_home_fe/models/device_update_model.dart';
 
@@ -13,6 +14,7 @@ class DeviceAPI {
   final String _changeStatusAPI = '/devices/changeStatus';
   final String _updateDevice = '/devices/update';
   final String _getDevicesType = '/devices/type';
+  final String _getDeviceLabel = '/labels';
   final dio = Dio();
   Future<List<DeviceModel>> getAllDevices() async {
     try {
@@ -28,7 +30,9 @@ class DeviceAPI {
           device['pin'] ?? '',
           device['room']['_id'] ?? '',
           device['room']['name'] ?? '', 
-          device['name'] ?? '',
+          device['name'] ?? 'no_name',
+          device['idDeviceLabel'] ?? '', 
+          device['deviceLabel'] ?? '',
           device['type'] ?? '',
           device['isConnected'] ?? false,
           device['status'] ?? 0
@@ -82,17 +86,20 @@ class DeviceAPI {
         },
       );
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
+        final device = jsonDecode(response.body);
+        // print(device);
         return DeviceModel(
-          data['idESP'] ?? '', 
-          data['_id'] ?? '',
-          data['pin'] ?? '',
-          data['idRoom'] ?? '',
-          data['roomName'] ?? '',
-          data['deviceName'] ?? 'no_name',
-          data['type'] ?? '',
-          data['isConnected'] ?? false,
-          data['status'] ?? 0
+          device['idESP'] ?? '', 
+          device['_id'] ?? '',
+          device['pin'] ?? '',
+          device['idRoom'] ?? '',
+          device['roomName'] ?? '',
+          device['deviceName'] ?? 'no_name',
+          device['idDeviceLabel'] ?? '',
+          device['deviceLabel'] ?? '',
+          device['type'] ?? '',
+          device['isConnected'] ?? false,
+          device['status'] ?? 0
         );
       } else {
         return null;
@@ -137,7 +144,7 @@ class DeviceAPI {
         body: {
           'id': device.id,
           'name': device.name,
-          'type': device.type,
+          'label': device.idLabel,
           // 'idRoom': device.idRoom,
         }
       );
@@ -145,6 +152,28 @@ class DeviceAPI {
     } catch (err) {
       print('[DeviceAPI][UpdateDeviceInfo]: $err');
       return false;
+    }
+  }
+
+  Future<List<DeviceLabelModel>> getLabelByDeviceType(String type) async {
+    try {
+      final response = await dio.get(
+        Uri.http(APIConfig.baseServerFirmwareURL, '$_getDeviceLabel/$type').toString(),
+      );
+      if (response.statusCode == 200) {
+        final data = response.data;
+        // print(data);
+        return List.from(data['labels'].map((label) => DeviceLabelModel(
+          label['_id'] ?? '',
+          label['label'] ?? '',
+          label['type'] ?? ''
+        )));
+      } else {
+        return List.empty();
+      }
+    } catch (err) {
+      print('[DeviceAPI][GetLabelByDeviceType]: $err');
+      return List.empty();
     }
   }
 }

@@ -34,7 +34,6 @@ class _IndexPageState extends State<IndexPage> {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<DeviceViewModel>(context, listen: false).initDeviceInfo();
     return Scaffold(
       body: PageView(
         controller: _pageController,

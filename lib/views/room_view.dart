@@ -49,7 +49,7 @@ class _RoomViewState extends State<RoomView> {
           ],
         ),
       ),
-      onLongPress: () {
+      onTap: () {
         Navigator.pushNamed(
           context, 
           '/room',

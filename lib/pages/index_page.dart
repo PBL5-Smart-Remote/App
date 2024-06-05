@@ -5,6 +5,7 @@ import 'package:smart_home_fe/pages/account_page.dart';
 import 'package:smart_home_fe/pages/connection_page.dart';
 import 'package:smart_home_fe/pages/home_page.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+import 'package:smart_home_fe/pages/schedule_page.dart';
 import 'package:smart_home_fe/pages/voice_page.dart';
 import 'package:smart_home_fe/view_models/device_view_model.dart';
 
@@ -21,8 +22,9 @@ class _IndexPageState extends State<IndexPage> {
 
   final _pages = [
     HomePage(),
+    SchedulePage(),
     VoicePage(),
-    ConnectionPage(),
+    // ConnectionPage(),
     AccountPage(),
   ];
 
@@ -51,7 +53,7 @@ class _IndexPageState extends State<IndexPage> {
           _currentPage = selectedIndex;
           _pageController.animateToPage(
             selectedIndex,
-            duration: const Duration(milliseconds: 300),
+            duration: const Duration(microseconds: 100),
             curve: Curves.easeInOut,
           );
         },

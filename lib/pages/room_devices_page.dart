@@ -43,7 +43,7 @@ class _RoomDevicesPageState extends State<RoomDevicesPage> {
                         crossAxisSpacing: 5,
                         crossAxisCount: 2,
                         physics: const BouncingScrollPhysics(),
-                        children:roomViewModel.room!.deviceList.map((device) => DeviceView(device, isEditable: true)).toList()
+                        children: roomViewModel.room!.deviceList.map((device) => DeviceView(device, isEditable: true)).toList()
                       ),
                     )
                   ],

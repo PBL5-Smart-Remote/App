@@ -37,20 +37,20 @@ class _EditDevicePageState extends State<EditDevicePage> {
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    Provider.of<DeviceViewModel>(context, listen: false).getDeviceLabels(args['type']);
-    Provider.of<DeviceViewModel>(context, listen: false).getDeviceInfo(args['id']);
-    
-    return Scaffold(
-      appBar: AppBar(
-        title: const AppBarTitle('Edit device'),
-      ),
-      body : Consumer<DeviceViewModel>(
+    Provider.of<DeviceViewModel>(context, listen: false).getDeviceLabels(args['type']);    
+    return PopScope(
+      onPopInvoked: (didPop) => Provider.of<DeviceViewModel>(context, listen: false).clearData(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const AppBarTitle('Edit device'),
+        ),
+        body : Consumer<DeviceViewModel>(
           builder: (context, viewModel, child) {
-            if (viewModel.deviceLabels.isEmpty || viewModel.device == null) {
+            if (viewModel.deviceLabels.isEmpty || viewModel.devices[args['id']] == null) {
               return const Center(child: CircularProgressIndicator());
             } else {
-              _nameController.text = viewModel.device!.deviceName;
-              _selectedLabel = viewModel.device!.label.idLabel == '' ? null : viewModel.device!.label.idLabel;
+              _nameController.text = viewModel.devices[args['id']]!.deviceName;
+              _selectedLabel = viewModel.devices[args['id']]!.label.idLabel == '' ? null : viewModel.devices[args['id']]!.label.idLabel;
               return  Padding(
                 padding: const EdgeInsets.all(20),
                 child: Form(
@@ -86,14 +86,14 @@ class _EditDevicePageState extends State<EditDevicePage> {
                       ),
                       TextFormField(
                         readOnly: true,
-                        initialValue: viewModel.device!.type,
+                        initialValue: viewModel.devices[args['id']]!.type,
                         decoration: const InputDecoration(
                           label: Text('Type')
                         ),
                       ),
                       TextFormField(
                         readOnly: true,
-                        initialValue: viewModel.device!.roomName,
+                        initialValue: viewModel.devices[args['id']]!.roomName,
                         decoration: const InputDecoration(
                           label: Text('Room')
                         ),
@@ -114,7 +114,7 @@ class _EditDevicePageState extends State<EditDevicePage> {
             }
           }
         ),
-      
+      ),
     );
   }
 }

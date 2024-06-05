@@ -1,12 +1,7 @@
-import 'dart:convert';
-import 'dart:io';
+// ignore_for_file: avoid_print
 
 import 'package:dio/dio.dart';
-import 'package:http/http.dart' as http;
-import 'package:http_parser/http_parser.dart';
-import 'package:mime/mime.dart';
 import 'package:smart_home_fe/config/api_config.dart';
-
 
 class VoiceAPI {
   final String _sendVoiceAPI = '/audio/';
@@ -33,7 +28,8 @@ class VoiceAPI {
         //     "Authorization": token!
         //   }
         // ),
-        data: formData );
+        data: formData 
+      );
 
       if (response.statusCode == 200) {
         final data = response.data;

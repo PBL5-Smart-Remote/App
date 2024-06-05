@@ -1,7 +1,6 @@
-import 'dart:convert';
+// ignore_for_file: prefer_for_elements_to_map_fromiterable, avoid_print
 
 import 'package:dio/dio.dart';
-import 'package:http/http.dart' as http;
 import 'package:smart_home_fe/config/api_config.dart';
 import 'package:smart_home_fe/models/device_control_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,34 +14,41 @@ class DeviceAPI {
   final String _updateDevice = '/devices/update';
   final String _getDevicesType = '/devices/type';
   final String _getDeviceLabel = '/labels';
+
   final dio = Dio();
-  Future<List<DeviceModel>> getAllDevices() async {
+
+  Future<Map<String, DeviceModel>> getAllDevices() async {
     try {
+      String url = Uri.https(APIConfig.baseServerFirmwareURL, '$_getDevice/allDevices').toString();
       final response = await dio.get(
-        Uri.http(APIConfig.baseServerFirmwareURL, '$_getDevice/allDevices').toString(),
+        url,
       );
+
       if (response.statusCode == 200) {
         final data = response.data;
         print(data);
-        return List.from(data.map((device) => DeviceModel(
-          device['ESP']['_idESP'] ?? '',
-          device['_id'] ?? '',
-          device['pin'] ?? '',
-          device['room']['_id'] ?? '',
-          device['room']['name'] ?? '', 
-          device['name'] ?? 'no_name',
-          device['label']['_id'] ?? '', 
-          device['label']['label'] ?? '',
-          device['type'] ?? '',
-          device['isConnected'] ?? false,
-          device['status'] ?? 0
-        )));
+        return Map.fromIterable(data, 
+          key: (device) => device['_id'].toString(),
+          value: (device) => DeviceModel(
+            device['ESP'] ?? '',
+            device['_id'] ?? '',
+            device['pin'] ?? '',
+            device['room']['_id'] ?? '',
+            device['room']['name'] ?? '', 
+            device['name'] ?? 'no_name',
+            device['label']['_id'] ?? '', 
+            device['label']['label'] ?? '', 
+            device['type'] ?? '',
+            device['isConnected'] ?? false,
+            device['status'] ?? 0
+          )
+        );
       } else {
-        return List.empty();
+        return {};
       }
     } catch (err) {
       print('[DeviceAPI][GetAllDevices]: $err');
-      return List.empty();
+      return {};
     }
   }
 
@@ -50,24 +56,26 @@ class DeviceAPI {
     try {
       // var prefs = await SharedPreferences.getInstance();
       // var token = prefs.getString('token');
-      var url = APIConfig.baseServerFirmwareURL + _changeStatusAPI;
-      print(url);
-      final response = await http.post(
-        Uri.https(APIConfig.baseServerFirmwareURL, _changeStatusAPI),
-        headers: {
-          // "Authorization": token!,
-          "Content-Type": "application/json",
-        },
-        body: jsonEncode({
+      String url = Uri.https(APIConfig.baseServerFirmwareURL, _changeStatusAPI).toString();
+
+      final response = await dio.post(
+        url,
+        options: Options(
+          headers: {
+            // "Authorization": token!,
+            "Content-Type": "application/json",
+          },
+        ),
+        data: {
           "devices": [ 
             {
               "_id": model.idDevice,
               "status": (model.status == 1 ? "on" : "off")
             }
           ]
-        })
+        }
       );
-      print(response.statusCode);
+      print(response.data);
       return response.statusCode == 200;
     } catch (err) {
       print('[DeviceAPI][ChangeStatus]: $err');
@@ -79,14 +87,17 @@ class DeviceAPI {
     try {
       // var prefs = await SharedPreferences.getInstance();
       // var token = prefs.getString('token');
-      final response = await http.get(
-        Uri.https(APIConfig.baseServerFirmwareURL, '$_getDevice/$id'),
-        headers: {
-          // "Authorization": token!,
-        },
+      String url = Uri.https(APIConfig.baseServerFirmwareURL, '$_getDevice/$id').toString();
+      final response = await dio.get(
+        url,
+        // options: Options(
+        //   headers: {
+        //     "Authorization": token!,
+        //   },
+        // )
       );
       if (response.statusCode == 200) {
-        final device = jsonDecode(response.body);
+        final device = response.data;
         // print(device);
         return DeviceModel(
           device['ESP']['_idESP'] ?? '', 
@@ -114,14 +125,17 @@ class DeviceAPI {
     try {
       // var prefs = await SharedPreferences.getInstance();
       // var token = prefs.getString('token');
-      final response = await http.get(
-        Uri.https(APIConfig.baseServerFirmwareURL, _getDevicesType),
-        // headers: {
-        //   "Authorization": token!
-        // },
+      String url = Uri.https(APIConfig.baseServerFirmwareURL, _getDevicesType).toString();
+      final response = await dio.get(
+        url,
+        // options: Options(
+        //   headers: {
+        //     "Authorization": token!
+        //   },
+        // ),
       );
       if(response.statusCode == 200) {
-        final data = jsonDecode(response.body);
+        final data = response.data;
         return List.from(data.map((type) => type));
       } else {
         return List.empty();
@@ -136,12 +150,13 @@ class DeviceAPI {
     try {
       // var prefs = await SharedPreferences.getInstance();
       // var token = prefs.getString('token');
-      final response = await http.put(
-        Uri.https(APIConfig.baseServerFirmwareURL, '$_updateDevice/${device.id}'),
+      String url = Uri.https(APIConfig.baseServerFirmwareURL, '$_updateDevice/${device.id}').toString();
+      final response = await dio.put(
+        url,
         // headers: {
         //   "Authorization": token!
         // },
-        body: {
+        data: {
           'name': device.name,
           'label': device.idLabel,
           // 'idRoom': device.idRoom,
@@ -156,12 +171,13 @@ class DeviceAPI {
 
   Future<List<DeviceLabelModel>> getLabelByDeviceType(String type) async {
     try {
+      String url = Uri.https(APIConfig.baseServerFirmwareURL, '$_getDeviceLabel/$type').toString();
       final response = await dio.get(
-        Uri.http(APIConfig.baseServerFirmwareURL, '$_getDeviceLabel/$type').toString(),
+        url,
       );
       if (response.statusCode == 200) {
         final data = response.data;
-        // print(data);
+        print(data);
         return List.from(data['labels'].map((label) => DeviceLabelModel(
           label['_id'] ?? '',
           label['label'] ?? '',

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, avoid_print
+
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,7 +22,7 @@ class AccountPage extends GenericPage {
 }
 
 class _AccountPageState extends State<AccountPage> {
-  final _serverFirmwareController = TextEditingController(text: APIConfig.baseServerFirmwareURL);
+  // final _serverFirmwareController = TextEditingController(text: APIConfig.baseServerFirmwareURL);
   final _serverAIController = TextEditingController(text: APIConfig.baseServerAIURL);
 
   // UserModel user;
@@ -48,7 +50,7 @@ class _AccountPageState extends State<AccountPage> {
     return Scaffold(
       appBar: AppBar(
         title: const AppBarTitle("Account"),
-        actions: [IconButton(onPressed: () async => _logout(context), icon: Icon(Icons.logout))],
+        actions: [IconButton(onPressed: () async => _logout(context), icon: const Icon(Icons.logout))],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -103,7 +105,7 @@ class _AccountPageState extends State<AccountPage> {
                       child: const Text('Edit information')
                     ),
                   ),
-                  SizedBox(width: 5),
+                  const SizedBox(width: 5),
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -133,27 +135,27 @@ class _AccountPageState extends State<AccountPage> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   foregroundColor: Colors.white,
-                  minimumSize: Size(double.infinity, 35),
+                  minimumSize: const Size(double.infinity, 35),
                 ),
-                child: Text('Update url')
+                child: const Text('Update url')
               ),
-              TextField(
-                controller: _serverFirmwareController,
-                decoration: const InputDecoration(
-                  label: Text('ServerFirmwareURL')
-                )
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  APIConfig.baseServerFirmwareURL = _serverFirmwareController.text;
-                }, 
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  foregroundColor: Colors.white,
-                  minimumSize: Size(double.infinity, 35),
-                ),
-                child: Text('Update url')
-              )
+              // TextField(
+              //   controller: _serverFirmwareController,
+              //   decoration: const InputDecoration(
+              //     label: Text('ServerFirmwareURL')
+              //   )
+              // ),
+              // ElevatedButton(
+              //   onPressed: () {
+              //     APIConfig.baseServerFirmwareURL = _serverFirmwareController.text;
+              //   }, 
+              //   style: ElevatedButton.styleFrom(
+              //     backgroundColor: Colors.blue,
+              //     foregroundColor: Colors.white,
+              //     minimumSize: Size(double.infinity, 35),
+              //   ),
+              //   child: Text('Update url')
+              // )
             ],
           )
         

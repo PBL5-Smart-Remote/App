@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:smart_home_fe/api/connection_api.dart';
@@ -32,7 +33,7 @@ class ConnectionViewModel with ChangeNotifier {
       if (can == CanStartScan.yes) {
         WiFiScan.instance.startScan().then((value) => notifyListeners());
       } else {
-        kShowSnackBar(context, '$can');
+        showSnackBar(context, 'Error', '$can', ContentType.failure);
       }
     } catch (err) {
       print('[ConnectionViewModel][ScanWifi]: $err');

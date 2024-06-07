@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_home_fe/models/add_schedule_model.dart';
 import 'package:smart_home_fe/models/schedule_model.dart';
 import 'package:smart_home_fe/services/schedule_service.dart';
 
@@ -14,6 +15,15 @@ class ScheduleViewModel with ChangeNotifier {
       notifyListeners();
     } catch (err) {
       print('[ScheduleViewModel][GetAllSchedule]: $err');
+    }
+  }
+
+  Future<bool> addNewSchedule(AddScheduleModel schedule) async {
+    try {
+      return await scheduleService.addNewSchedule(schedule);
+    } catch (err) {
+      print('[ScheduleViewModel][AddNewSchedule]: $err');
+      return false;
     }
   }
 }

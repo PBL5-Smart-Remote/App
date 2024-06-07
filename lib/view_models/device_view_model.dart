@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:smart_home_fe/models/device_control_model.dart';
@@ -9,9 +11,8 @@ import 'package:smart_home_fe/services/device_service.dart';
 class DeviceViewModel with ChangeNotifier {
   final DeviceService _deviceService = DeviceService();
 
-  List<DeviceLabelModel> deviceLabels = List.empty(growable: false);
-  Map<String, DeviceModel> _devices = {};
-  Map<String, DeviceModel> get devices => _devices;
+  List<DeviceModel> _devices = List.empty();
+  List<DeviceModel> get devices => _devices;
 
   Future<void> getDevices() async {
     try {
@@ -34,45 +35,29 @@ class DeviceViewModel with ChangeNotifier {
     }
   }
 
-  Future<void> getDeviceLabels(String type) async {
+  Future<List<DeviceLabelModel>> getDeviceLabels(String type) async {
     try {
-      _deviceService.getLabelByDeviceType(type).then((value)  {
-        deviceLabels = value;
-        print(deviceLabels);
-        notifyListeners();
-      });
+      return await _deviceService.getLabelByDeviceType(type);
     } catch (err) {
       print('[DeviceViewModel][InitDeviceInfo]: $err');
+      return List.empty();
     }
   }
 
-  void clearData() {
+
+
+  Future<DeviceModel?> getDeviceInfo(String id) async {
     try {
-      deviceLabels = List.empty();
+      return await _deviceService.getDeviceInfo(id);
     } catch (err) {
-      print('[DeviceViewModel][ClearData]: $err');
+      print('[DeviceViewModel][GetDeviceInfo]: $err');
+      return null;
     }
   }
 
-  // Future<void> getDeviceInfo(String id) async {
-  //   try {
-  //     // _deviceService.getDeviceInfo(id).then((value) {
-  //     //   print(value);
-  //     //   _device = value;
-  //     // notifyListeners();
-  //     // });
-  //     _device = await _deviceService.getDeviceInfo(id);
-  //     print(_device);
-  //     notifyListeners();
-  //   } catch (err) {
-  //     print('[DeviceViewModel][GetDeviceInfo]: $err');
-  //   }
-  // }
-
-  Future<bool> updateDeviceInfo(DeviceUpdateModel device) async {
+  Future<bool> updateDeviceInfo(DeviceModel device) async {
     try {
-      if ( await _deviceService.updateDeviceInfo(device)) {
-        notifyListeners();
+      if (await _deviceService.updateDeviceInfo(device)) {
         return true;
       } else {
         return false;

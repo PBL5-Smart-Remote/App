@@ -8,12 +8,12 @@ import 'package:smart_home_fe/models/device_update_model.dart';
 class DeviceService {
   final deviceAPI = DeviceAPI();
 
-  Future<Map<String, DeviceModel>> getAllDevices() async {
+  Future<List<DeviceModel>> getAllDevices() async {
     try {
       return await deviceAPI.getAllDevices();
     } catch (err) {
       print('[DeviceService][GetAllDevices]: $err');
-      return {}; // empty map
+      return List.empty(); // empty map
     }
   }
 
@@ -44,7 +44,7 @@ class DeviceService {
     }
   }
 
-  Future<bool> updateDeviceInfo(DeviceUpdateModel device) async {
+  Future<bool> updateDeviceInfo(DeviceModel device) async {
     try {
       return await deviceAPI.updateDeviceInfo(device);
     } catch (err) {

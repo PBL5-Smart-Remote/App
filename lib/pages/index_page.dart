@@ -1,3 +1,4 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
@@ -7,6 +8,7 @@ import 'package:smart_home_fe/pages/home_page.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:smart_home_fe/pages/schedule_page.dart';
 import 'package:smart_home_fe/pages/voice_page.dart';
+import 'package:smart_home_fe/utils/business/show_snackbar.dart';
 import 'package:smart_home_fe/view_models/device_view_model.dart';
 
 class IndexPage extends StatefulWidget {

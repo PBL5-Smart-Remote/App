@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:io';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_iot_wifi/flutter_iot_wifi.dart';
@@ -78,7 +79,7 @@ class _AccessPointViewState extends State<AccessPointView> {
                       FlutterIotWifi.connect(title, _firmwarePasswordController.text, prefix: true)
                       .then((success) {
                         if(success == true) {
-                          kShowSnackBar(context, "Connect successfully");
+                          showSnackBar(context, "Connect successfully", '', ContentType.success);
                           
                           Navigator.pop(context);
                           showDialog(
@@ -113,10 +114,10 @@ class _AccessPointViewState extends State<AccessPointView> {
                                         // ConnectionAPI.setupESP(ConnectionModel(ssid, password))
                                         .then((success) {
                                           if (success) {
-                                            kShowSnackBar(context, "Set up successfully");
+                                            showSnackBar(context, "Set up successfully", '', ContentType.success);
                                             Navigator.pop(context);
                                           } else {
-                                            kShowSnackBar(context, "Set up failed");
+                                            showSnackBar(context, "Set up failed", '', ContentType.failure);
                                           }
                                         });
                                       },
@@ -127,11 +128,11 @@ class _AccessPointViewState extends State<AccessPointView> {
                             )
                           );
                         } else {
-                          kShowSnackBar(context, "Connect failed");
+                          showSnackBar(context, "Connect failed", '', ContentType.failure);
                         }
                       });
                     } else {
-                      kShowSnackBar(context, "No permission");
+                      showSnackBar(context, "No permission", '', ContentType.failure);
                     }
                   },
                   child: const Text("Connect"))

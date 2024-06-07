@@ -17,7 +17,7 @@ class DeviceAPI {
 
   final dio = Dio();
 
-  Future<Map<String, DeviceModel>> getAllDevices() async {
+  Future<List<DeviceModel>> getAllDevices() async {
     try {
       String url = Uri.https(APIConfig.baseServerFirmwareURL, '$_getDevice/allDevices').toString();
       final response = await dio.get(
@@ -27,9 +27,7 @@ class DeviceAPI {
       if (response.statusCode == 200) {
         final data = response.data;
         print(data);
-        return Map.fromIterable(data, 
-          key: (device) => device['_id'].toString(),
-          value: (device) => DeviceModel(
+        return List.from(data.map((device) => DeviceModel(
             device['ESP'] ?? '',
             device['_id'] ?? '',
             device['pin'] ?? '',
@@ -42,13 +40,13 @@ class DeviceAPI {
             device['isConnected'] ?? false,
             device['status'] ?? 0
           )
-        );
+        ));
       } else {
-        return {};
+        return List.empty();
       }
     } catch (err) {
       print('[DeviceAPI][GetAllDevices]: $err');
-      return {};
+      return List.empty();
     }
   }
 
@@ -98,7 +96,7 @@ class DeviceAPI {
       );
       if (response.statusCode == 200) {
         final device = response.data;
-        // print(device);
+        print(device);
         return DeviceModel(
           device['ESP']['_idESP'] ?? '', 
           device['_id'] ?? '',
@@ -146,7 +144,7 @@ class DeviceAPI {
     }
   }
 
-  Future<bool> updateDeviceInfo(DeviceUpdateModel device) async {
+  Future<bool> updateDeviceInfo(DeviceModel device) async {
     try {
       // var prefs = await SharedPreferences.getInstance();
       // var token = prefs.getString('token');
@@ -157,8 +155,8 @@ class DeviceAPI {
         //   "Authorization": token!
         // },
         data: {
-          'name': device.name,
-          'label': device.idLabel,
+          'name': device.deviceName,
+          'label': device.label.idLabel,
           // 'idRoom': device.idRoom,
         }
       );

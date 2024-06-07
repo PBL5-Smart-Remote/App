@@ -61,6 +61,7 @@ class RoomAPI {
       );
       if(response.statusCode == 200) {
         final room = response.data['room'];
+        print(room);
         return RoomModel(
           room['_id'],
           room['name'],

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_home_fe/pages/generic_page.dart';
 import 'package:smart_home_fe/utils/widget/appbar_title.dart';
+import 'package:smart_home_fe/view_models/schedule_view_model.dart';
 import 'package:smart_home_fe/views/schedule_list_view.dart';
 
 class SchedulePage extends GenericPage {
@@ -15,8 +17,8 @@ class SchedulePage extends GenericPage {
 }
 
 class _SchedulePageState extends State<SchedulePage> {
-  Future<bool> addNewSchedule() async {
-    return true;
+  Future<void> addNewSchedule() async {
+    
   }
 
   @override
@@ -37,13 +39,16 @@ class _SchedulePageState extends State<SchedulePage> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 IconButton(
-                  onPressed: addNewSchedule, 
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/add-schedule')
+                    .then((value) => Provider.of<ScheduleViewModel>(context, listen: false).getAllSchedules());
+                  }, 
                   icon: const Icon(Icons.add),
                 ),
                 IconButton(
                   onPressed: null,
                   icon: const Icon(Icons.menu),
-                )
+                ),
               ],
             ),
             Expanded(

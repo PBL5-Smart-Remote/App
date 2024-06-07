@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_home_fe/models/room_brief_model.dart';
-import 'package:smart_home_fe/pages/room_devices_page.dart';
+import 'package:smart_home_fe/pages/room_page.dart';
 import 'package:smart_home_fe/view_models/room_view_model.dart';
 
 class RoomView extends StatefulWidget {

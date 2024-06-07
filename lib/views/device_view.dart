@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:smart_home_fe/models/device_control_model.dart';
 import 'package:smart_home_fe/models/device_model.dart';
 import 'package:smart_home_fe/view_models/device_view_model.dart';
+import 'package:smart_home_fe/view_models/room_view_model.dart';
 
 class DeviceView extends StatefulWidget {
   DeviceModel device;
@@ -20,6 +21,7 @@ class _DeviceViewState extends State<DeviceView> {
     return GestureDetector(
       onTap: widget.isEditable 
       ? () => Navigator.pushNamed(context, '/edit-device', arguments: {'id': widget.device.id, 'type': widget.device.type})
+              .then((value) => Provider.of<RoomViewModel>(context, listen: false).getRoomById(widget.device.idRoom))
       : null,
       child: Container(
         padding: const EdgeInsets.all(10),

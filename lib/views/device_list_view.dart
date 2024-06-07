@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_home_fe/view_models/device_view_model.dart';
 import 'package:smart_home_fe/views/device_view.dart';
@@ -25,7 +24,7 @@ class _DeviceListViewState extends State<DeviceListView> {
           crossAxisSpacing: 5,
           crossAxisCount: 2,
           physics: const BouncingScrollPhysics(),
-          children: deviceViewModel.devices.values.map((device) => DeviceView(device)).toList()
+          children: deviceViewModel.devices.map((device) => DeviceView(device)).toList()
         );
       }
     );

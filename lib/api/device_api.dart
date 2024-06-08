@@ -32,10 +32,10 @@ class DeviceAPI {
             device['_id'] ?? '',
             device['pin'] ?? '',
             device['room']['_id'] ?? '',
-            device['room']['name'] ?? '', 
+            device['room']['name'] ?? '',
             device['name'] ?? 'no_name',
-            device['label']['_id'] ?? '', 
-            device['label']['label'] ?? '', 
+            device['idDeviceLabel'] ?? '', 
+            device['deviceLabel'] ?? '',
             device['type'] ?? '',
             device['isConnected'] ?? false,
             device['status'] ?? 0

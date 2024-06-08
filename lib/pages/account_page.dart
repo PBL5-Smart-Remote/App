@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously, avoid_print
 
 import 'dart:math' as math;
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,6 +9,7 @@ import 'package:smart_home_fe/config/api_config.dart';
 import 'package:smart_home_fe/models/user_model.dart';
 import 'package:smart_home_fe/pages/generic_page.dart';
 import 'package:smart_home_fe/services/user_service.dart';
+import 'package:smart_home_fe/utils/business/show_snackbar.dart';
 import 'package:smart_home_fe/utils/widget/appbar_title.dart';
 
 class AccountPage extends GenericPage {
@@ -22,7 +24,8 @@ class AccountPage extends GenericPage {
 }
 
 class _AccountPageState extends State<AccountPage> {
-  // final _serverFirmwareController = TextEditingController(text: APIConfig.baseServerFirmwareURL);
+  final _serverAppController = TextEditingController(text: APIConfig.baseServerAppURL);
+  final _serverFirmwareController = TextEditingController(text: APIConfig.baseServerFirmwareURL);
   final _serverAIController = TextEditingController(text: APIConfig.baseServerAIURL);
 
   // UserModel user;
@@ -131,6 +134,7 @@ class _AccountPageState extends State<AccountPage> {
               ElevatedButton(
                 onPressed: () {
                   APIConfig.baseServerAIURL = _serverAIController.text;
+                  showSnackBar(context, "Success", "Update URL success", ContentType.success);
                 }, 
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
@@ -139,26 +143,44 @@ class _AccountPageState extends State<AccountPage> {
                 ),
                 child: const Text('Update url')
               ),
-              // TextField(
-              //   controller: _serverFirmwareController,
-              //   decoration: const InputDecoration(
-              //     label: Text('ServerFirmwareURL')
-              //   )
-              // ),
-              // ElevatedButton(
-              //   onPressed: () {
-              //     APIConfig.baseServerFirmwareURL = _serverFirmwareController.text;
-              //   }, 
-              //   style: ElevatedButton.styleFrom(
-              //     backgroundColor: Colors.blue,
-              //     foregroundColor: Colors.white,
-              //     minimumSize: Size(double.infinity, 35),
-              //   ),
-              //   child: Text('Update url')
-              // )
+              TextField(
+                controller: _serverFirmwareController,
+                decoration: const InputDecoration(
+                  label: Text('ServerFirmwareURL')
+                )
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  APIConfig.baseServerFirmwareURL = _serverFirmwareController.text;
+                  showSnackBar(context, "Success", "Update URL success", ContentType.success);
+                }, 
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
+                  minimumSize: const Size(double.infinity, 35),
+                ),
+                child: const Text('Update url')
+              ),
+              TextField(
+                controller: _serverAppController,
+                decoration: const InputDecoration(
+                  label: Text('ServerAppURL')
+                )
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  APIConfig.baseServerAppURL = _serverAppController.text;
+                  showSnackBar(context, "Success", "Update URL success", ContentType.success);
+                }, 
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
+                  minimumSize: const Size(double.infinity, 35),
+                ),
+                child: const Text('Update url')
+              ),
             ],
           )
-        
         ),
       )
     );

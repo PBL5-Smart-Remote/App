@@ -26,7 +26,7 @@ class _IndexPageState extends State<IndexPage> {
     HomePage(),
     SchedulePage(),
     VoicePage(),
-    // ConnectionPage(),
+    ConnectionPage(),
     AccountPage(),
   ];
 

@@ -17,11 +17,11 @@ class _ScheduleListViewState extends State<ScheduleListView> {
     Provider.of<ScheduleViewModel>(context, listen: false).getAllSchedules();
     return Consumer<ScheduleViewModel>(
       builder: (context, viewModel, child) {
-        if (viewModel.schedules == {}) {
+        if (viewModel.schedules.isEmpty) {
           return const Center(child: CircularProgressIndicator());
         } else {
           return Column(
-            children: List.from(viewModel.schedules.values.map((schedule) => ScheduleView(schedule))),
+            children: List.from(viewModel.schedules.map((schedule) => ScheduleView(schedule))),
           ); 
         }
       },

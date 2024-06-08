@@ -1,10 +1,13 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, avoid_function_literals_in_foreach_calls
+
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:day_picker/day_picker.dart';
+import 'package:day_picker/model/day_in_week.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_home_fe/models/add_schedule_model.dart';
+import 'package:smart_home_fe/models/schedule_model.dart';
 import 'package:smart_home_fe/utils/business/show_snackbar.dart';
 import 'package:smart_home_fe/utils/business/validators.dart';
 import 'package:smart_home_fe/utils/widget/appbar_title.dart';
@@ -13,14 +16,14 @@ import 'package:smart_home_fe/view_models/schedule_view_model.dart';
 import 'package:smart_home_fe/views/selected_device_view.dart';
 import 'package:time_picker_spinner/time_picker_spinner.dart';
 
-class AddSchedulePage extends StatefulWidget {
-  const AddSchedulePage({super.key});
+class UpdateSchedulePage extends StatefulWidget {
+  const UpdateSchedulePage({super.key});
 
   @override
-  State<AddSchedulePage> createState() => _AddSchedulePageState();
+  State<UpdateSchedulePage> createState() => _UpdateSchedulePageState();
 }
 
-class _AddSchedulePageState extends State<AddSchedulePage> {
+class _UpdateSchedulePageState extends State<UpdateSchedulePage> {
   List<DayInWeek> days = [
     DayInWeek("Sun", dayKey: '0'),
     DayInWeek("Mon", dayKey: '1'),
@@ -37,12 +40,8 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
 
   List<SelectedDeviceView> devices = List.empty(); 
 
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<DeviceViewModel>(context, listen: false).getDevices();
-    devices = Provider.of<DeviceViewModel>(context, listen: false).devices.map((device) => SelectedDeviceView(device)).toList();
-  }
+  ScheduleModel? schedule;
+
 
   void onPressed() {
     List<int> selectedDays = days.where((day) => day.isSelected == true).map((day) => int.parse(day.dayKey)).toList();
@@ -53,8 +52,9 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
     print(selectedDays);
     print(scheduleName);
     print(selectedDevices);
-    Provider.of<ScheduleViewModel>(context, listen: false).addNewSchedule(AddUpdateScheduleModel(
-      id: null,
+    final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    Provider.of<ScheduleViewModel>(context, listen: false).updateSchedule(AddUpdateScheduleModel(
+      id: args['id'],
       name: scheduleName, 
       devices: selectedDevices, 
       hour: selectedTime.hour, 
@@ -63,9 +63,9 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
     )).then((value) { 
       if (value == true) {
         Navigator.pop(context);
-        showSnackBar(context, 'Success', 'Add schedule succesfully', ContentType.success);
+        showSnackBar(context, 'Success', 'Update schedule succesfully', ContentType.success);
       } else {
-        showSnackBar(context, 'Whoops', 'Add schedule failed', ContentType.failure);
+        showSnackBar(context, 'Whoops', 'Update schedule failed', ContentType.failure);
       }
     });
   }
@@ -85,12 +85,18 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
       onTimeChange: (time) {
         setState(() {
           selectedTime = time;
+          print(selectedTime);
         });
       },
     );
   }
 
   Widget _selectDay() {
+    days.forEach((day) {
+      if (schedule!.daysOfWeek.contains(int.parse(day.dayKey))) {
+        day.isSelected = true;
+      }
+    });
     return SelectWeekDays(
       fontSize: 14,
       fontWeight: FontWeight.w500,
@@ -112,6 +118,7 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
   }
 
   Widget _inputScheduleName() {
+    _scheduleNameController.text = schedule!.name;
     return TextFormField(
       validator: validateEmpty,
       controller: _scheduleNameController,
@@ -122,6 +129,9 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
   }
 
   Widget _selectDevices() {
+    devices.forEach((device) { if(schedule!.devices.contains(device.device.id)) {
+      device.isSelected = true;
+    } });
     return devices.isEmpty 
       ? const Center(child: CircularProgressIndicator())
       : Column(
@@ -132,17 +142,37 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
   Widget _addScheduleButton() {
     return ElevatedButton(
       onPressed: onPressed, 
-      child: const Text('Add schedule'),
+      child: const Text('Update schedule'),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    if (schedule == null) {
+      Provider.of<ScheduleViewModel>(context, listen: false).getScheduleById(args['id']).then((value) {
+        schedule = value;
+        Provider.of<DeviceViewModel>(context, listen: false).getDevices().then((value) {
+          devices = value.map((device) => SelectedDeviceView(device)).toList();
+          selectedTime = DateTime(2024, 1, 1, schedule!.hour, schedule!.minute);
+          setState(() {});
+        });
+      });
+    }
     return Scaffold(
       appBar: AppBar(
-        title: const AppBarTitle('Add schedule'),
+        title: const AppBarTitle('Update schedule'),
+        actions: [IconButton(icon: const Icon(Icons.delete), onPressed: () {
+          Provider.of<ScheduleViewModel>(context, listen: false).deleteSchedule(args['id']).then((value) {
+            Provider.of<ScheduleViewModel>(context, listen: false).getAllSchedules();
+            Navigator.pop(context);
+          });
+        },)],
       ),
-      body: Container(
+    
+      body: schedule == null 
+        ? const Center(child: CircularProgressIndicator())
+        : Container(
         padding: const EdgeInsets.all(20),
         child: SingleChildScrollView(
           child: Column(

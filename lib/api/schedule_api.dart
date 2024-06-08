@@ -8,10 +8,12 @@ import 'package:dio/dio.dart';
 class ScheduleAPI {
   final String _getSchedule = '/schedule/get';
   final String _addSchedule = '/schedule/add';
+  final String _updateSchedule = '/schedule/update';
+  final String _deleteSchedule = '/schedule/delete';
 
   final dio = Dio();
 
-  Future<Map<String, ScheduleModel>> getAllSchedule() async {
+  Future<List<ScheduleModel>> getAllSchedule() async {
     try {
       final response = await dio.get(
         Uri.https(APIConfig.baseServerAppURL, '$_getSchedule/allSchedules').toString(),
@@ -19,28 +21,53 @@ class ScheduleAPI {
       if (response.statusCode == 200) {
         final data = response.data;
         print(data);
-        return Map.fromIterable(data['schedules'], 
-          key : (schedule) => schedule['_id'].toString(),
-          value : (schedule) => ScheduleModel(
+        return List.from(data['schedules'].map((schedule) => ScheduleModel(
             id: schedule['_id'],
             name: schedule['name'],
-            devices: null,
+            devices: schedule['devices'].map((device) => device['_id']).toList().cast<String>(),
             hour: schedule['time']['hour'] ?? 0,
             minute: schedule['time']['minute'] ?? 0,
             daysOfWeek: schedule['daysOfWeek'].cast<int>() ?? List.empty(),
-            isActive: schedule['isActive'] != null ? schedule['isActive'] == 1 : false,
+            isActive: schedule['isActive'] ?? 0,
           )
-        );
+        ));
       } else {
-        return {}; 
+        return List.empty(); 
       }
     } catch (err) {
       print('[ScheduleAPI][GetAllSchedule]: $err');
-      return {};
+      return List.empty();
     }
   }
 
-  Future<bool> addNewSchedule(AddScheduleModel schedule) async {
+  Future<ScheduleModel?> getScheduleById(String id) async {
+    try {
+      final response = await dio.get(
+        Uri.https(APIConfig.baseServerAppURL, '$_getSchedule/$id').toString(),
+      );
+      if (response.statusCode == 200) {
+        final schedule = response.data['schedule'];
+        print(schedule);
+        return ScheduleModel(
+            id: schedule['_id'],
+            name: schedule['name'],
+            devices: schedule['devices'].map((device) => device['_id']).toList().cast<String>(),
+            hour: schedule['time']['hour'] ?? 0,
+            minute: schedule['time']['minute'] ?? 0,
+            daysOfWeek: schedule['daysOfWeek'].cast<int>() ?? List.empty(),
+            isActive: schedule['isActive'] ?? 0,
+          )
+        ;
+      } else {
+        return null; 
+      }
+    } catch (err) {
+      print('[ScheduleAPI][GetAllSchedule]: $err');
+      return null;
+    }
+  }
+
+  Future<bool> addNewSchedule(AddUpdateScheduleModel schedule) async {
     try {
       String url = Uri.https(APIConfig.baseServerAppURL, _addSchedule).toString();
       final response = await dio.post(
@@ -59,6 +86,60 @@ class ScheduleAPI {
       return response.statusCode == 200;
     } catch(err) {
       print('[ScheduleAPI][AddNewSchedule]: $err');
+      return false;
+    }
+  }
+
+  Future<bool> updateSchedule(AddUpdateScheduleModel schedule) async {
+    try {
+      String url = Uri.https(APIConfig.baseServerAppURL, '$_updateSchedule/${schedule.id}').toString();
+      final response = await dio.post(
+        url,
+        data: {
+          'devices': schedule.devices.map((device) => { "_id" : device, 'status': 1 }).toList(),
+          'name': schedule.name,
+          'daysOfWeek': schedule.daysOfWeek,
+          'time': {
+            'hour': schedule.hour,
+            'minute': schedule.minute,
+          },
+        }
+      );
+      print(response.data);
+      return response.statusCode == 200;
+    } catch(err) {
+      print('[ScheduleAPI][UpdateNewSchedule]: $err');
+      return false;
+    }
+  }
+
+  Future<bool> changeStatusSchedule(String id, int status) async {
+    try {
+      String url = Uri.https(APIConfig.baseServerAppURL, '$_updateSchedule/$id/status').toString();
+      final response = await dio.patch(
+        url,
+        data: {
+          'isActive': status,
+        }
+      );
+      print(response.data);
+      return response.statusCode == 200;
+    } catch(err) {
+      print('[ScheduleAPI][ChangeStatusSchedule]: $err');
+      return false;
+    }
+  }
+
+  Future<bool> deleteSchedule(String id) async {
+    try {
+      String url = Uri.https(APIConfig.baseServerAppURL, '$_deleteSchedule/$id').toString();
+      final response = await dio.delete(
+        url,
+      );
+      print(response.data);
+      return response.statusCode == 200;
+    } catch(err) {
+      print('[ScheduleAPI][DeleteSchedule]: $err');
       return false;
     }
   }

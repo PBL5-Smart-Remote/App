@@ -7,6 +7,7 @@ import 'package:smart_home_fe/pages/change_password.dart';
 import 'package:smart_home_fe/pages/index_page.dart';
 import 'package:smart_home_fe/pages/login_page.dart';
 import 'package:smart_home_fe/pages/register_page.dart';
+import 'package:smart_home_fe/pages/update_schedule_page.dart';
 import 'package:smart_home_fe/pages/user_info_page.dart';
 
 class Routes {
@@ -22,6 +23,7 @@ class Routes {
       '/user-info': (context) => const UserInfoPage(),
       '/change-password': (context) => const ChangePasswordPage(),
       '/add-schedule': (context) => const AddSchedulePage(),
+      '/update-schedule': (context) => const UpdateSchedulePage(),
     };
     return _route;
   }

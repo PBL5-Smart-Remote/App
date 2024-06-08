@@ -12,6 +12,7 @@ class DeviceListView extends StatefulWidget {
 }
 
 class _DeviceListViewState extends State<DeviceListView> {
+  
   @override
   Widget build(BuildContext context) {
     Provider.of<DeviceViewModel>(context, listen: false).getDevices();

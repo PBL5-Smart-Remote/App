@@ -15,6 +15,7 @@ class RoomListView extends StatefulWidget {
 
 class _RoomListViewState extends State<RoomListView> {
   var link = "https://media.architecturaldigest.com/photos/62f3c04c5489dd66d1d538b9/16:9/w_2560%2Cc_limit/_Hall_St_0256_v2.jpeg";
+
   @override
   Widget build(BuildContext context) {
     Provider.of<RoomListViewModel>(context, listen: false).getRooms();
@@ -28,18 +29,10 @@ class _RoomListViewState extends State<RoomListView> {
               crossAxisSpacing: 15,
               crossAxisCount: 2,
               physics: const BouncingScrollPhysics(),
-              // children: [
-              //   RoomView(RoomBriefModel('', link, "Living room", 4, 3)),
-              //   RoomView(RoomBriefModel('', link, "Dining room", 4, 3)),
-              //   RoomView(RoomBriefModel('', link, "Bathroom", 4, 3)),
-              //   RoomView(RoomBriefModel('', link, "Bedroom", 4, 3)),
-              //   RoomView(RoomBriefModel('', link, "Gaming room", 4, 3)),
-              // ],
               children: List.from(roomViewModel.rooms.map((room) => RoomView(room))), 
             );
         },
       )
-   
     );
   }
 }

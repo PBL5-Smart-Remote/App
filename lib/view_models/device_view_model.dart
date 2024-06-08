@@ -14,12 +14,14 @@ class DeviceViewModel with ChangeNotifier {
   List<DeviceModel> _devices = List.empty();
   List<DeviceModel> get devices => _devices;
 
-  Future<void> getDevices() async {
+  Future<List<DeviceModel>> getDevices() async {
     try {
       _devices = await _deviceService.getAllDevices();
       notifyListeners();
+      return _devices;
     } catch (err) {
       print('[DeviceListViewModel][GetRooms]: $err');
+      return List.empty();
     }
   }
 

@@ -1,14 +1,19 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_home_fe/models/device_label_model.dart';
+import 'package:smart_home_fe/models/device_model.dart';
 import 'package:smart_home_fe/models/device_update_model.dart';
 import 'package:smart_home_fe/utils/business/show_alert_dialog.dart';
+import 'package:smart_home_fe/utils/business/show_snackbar.dart';
 import 'package:smart_home_fe/utils/business/validators.dart';
 import 'package:smart_home_fe/utils/widget/appbar_title.dart';
 import 'package:smart_home_fe/view_models/device_view_model.dart';
+import 'package:smart_home_fe/views/device_view.dart';
 
 class EditDevicePage extends StatefulWidget {
   const EditDevicePage({super.key});
-
+  
   @override
   State<EditDevicePage> createState() => _EditDevicePageState();
 }
@@ -16,20 +21,34 @@ class EditDevicePage extends StatefulWidget {
 class _EditDevicePageState extends State<EditDevicePage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final _nameController = TextEditingController();
-  String? _selectedType;
-  String? _selectedRoomId;
-  
+  List<DeviceLabelModel> deviceLabels = List.empty();
+  DeviceModel? device;
 
-  Future<void> _updateDeviceInfo(String id) async {
+  final _nameController = TextEditingController();
+  String? _selectedLabel;  
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+  //   setState(() {
+  //     Provider.of<DeviceViewModel>(context, listen: false).getDeviceInfo(args['id']).then((value) => device = value!); 
+  //     Provider.of<DeviceViewModel>(context, listen: false).getDeviceLabels(device!.type).then((value) => deviceLabels = value);
+  //     _nameController.text = device!.deviceName;
+  //     _selectedLabel = device!.label.idLabel;
+  //   });
+  // }
+
+  Future<void> _updateDeviceInfo() async {
     if (_formKey.currentState!.validate()) {
-      String name = _nameController.text;
-      Provider.of<DeviceViewModel>(context, listen: false).updateDeviceInfo(DeviceUpdateModel(id, name, _selectedType!, _selectedRoomId!))
+      device!.deviceName = _nameController.text;
+      Provider.of<DeviceViewModel>(context, listen: false).updateDeviceInfo(device!)
       .then((value) {
         if (value) {
-          showAlertDialog(context, 'Update successfully');
+          Navigator.pop(context);
+          showSnackBar(context, 'Success', 'Update device successfully', ContentType.success);
         } else {
-          showAlertDialog(context,  'Update failed');
+          showSnackBar(context, 'Whoops', 'Update device failed', ContentType.failure);
         }       
       });
     }
@@ -37,87 +56,89 @@ class _EditDevicePageState extends State<EditDevicePage> {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    Provider.of<DeviceViewModel>(context, listen: false).getDeviceInfo(args['id']);
-    return Scaffold(
-      appBar: AppBar(
-        title: AppBarTitle('Edit device'),
-      ),
-      body : SingleChildScrollView(
-        child: Consumer<DeviceViewModel>(
-          builder: (context, viewModel, child) {
-            if (viewModel.deviceTypes.isEmpty || viewModel.roomsInfo.isEmpty || viewModel.device == null) {
-              return const Center(child: CircularProgressIndicator());
-            } else {
-              _selectedType = viewModel.device!.type == '' ? null : viewModel.device!.type;
-              _selectedRoomId = viewModel.device!.idRoom == '' ? null : viewModel.device!.idRoom;
-              return  Padding(
-                padding: const EdgeInsets.all(20),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        validator: validateEmpty,
-                        controller: _nameController,
-                        initialValue: viewModel.device!.deviceName,
-                        decoration: const InputDecoration(
-                          label: Text('Device name')
-                        ),
-                      ),
-                      DropdownButtonFormField(
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        validator: validateSelectionItem,
-                        decoration: const InputDecoration(
-                          label: Text("Device type")
-                        ),
-                        value: _selectedType,
-                        items: List.from(viewModel.deviceTypes.map(
-                          (type) => DropdownMenuItem(
-                            value: type,
-                            child: Text(type)
-                          ))), 
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedType = value as String?;
-                          });
-                        }
-                      ),
-                      DropdownButtonFormField(
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        validator: validateSelectionItem,
-                        decoration: const InputDecoration(
-                          label: Text("Room")
-                        ),
-                        value: _selectedRoomId,
-                        items: List.from(viewModel.roomsInfo.map(
-                          (room) => DropdownMenuItem(
-                            value: room.$1,
-                            child: Text(room.$2)
-                          ))), 
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedRoomId = value as String?;
-                          });
-                        }
-                      ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                            foregroundColor: Colors.white,
-                            minimumSize: const Size(double.infinity, 35)
-                        ),
-                        onPressed: () async => await _updateDeviceInfo(args['id']), 
-                        child: const Text('Update'),
-                      )
-                    ], 
-                  ),
-                )
-              );
-            }
-          }
+    if (device == null || deviceLabels.isEmpty) {
+      final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+      Provider.of<DeviceViewModel>(context, listen: false).getDeviceInfo(args['id'])
+      .then((value) { 
+        device = value;
+        _nameController.text = device!.deviceName;
+        _selectedLabel = device!.label.idLabel;
+        Provider.of<DeviceViewModel>(context, listen: false).getDeviceLabels(device!.type)
+        .then((value) {
+          deviceLabels = value;
+          setState(() {});
+        });
+      }); 
+    }
+    
+    return PopScope(
+      // onPopInvoked: (didPop) => Provider.of<DeviceViewModel>(context, listen: false).clearData(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const AppBarTitle('Edit device'),
         ),
+        body : (deviceLabels.isEmpty || device == null) 
+          ? const Center(child: CircularProgressIndicator())
+          : Padding(
+              padding: const EdgeInsets.all(20),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: validateEmpty,
+                      controller: _nameController,
+                      decoration: const InputDecoration(
+                        label: Text('Device name')
+                      ),
+                    ),
+                    DropdownButtonFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: validateSelectionItem,
+                      decoration: const InputDecoration(
+                        label: Text("Device label")
+                      ),
+                      value: device!.label.idLabel,
+                      items: List.from(deviceLabels.map(
+                        (label) => DropdownMenuItem(
+                          value: label.idLabel,
+                          child: Text(label.labelName)
+                        ))), 
+                      onChanged: (value) {
+                        // setState(() {
+                          device!.label.idLabel = value as String;
+                        // });
+                        print(_selectedLabel);
+                      }
+                    ),
+                    TextFormField(
+                      readOnly: true,
+                      initialValue: device!.type,
+                      decoration: const InputDecoration(
+                        label: Text('Type')
+                      ),
+                    ),
+                    TextFormField(
+                      readOnly: true,
+                      initialValue: device!.roomName,
+                      decoration: const InputDecoration(
+                        label: Text('Room')
+                      ),
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                          foregroundColor: Colors.white,
+                          minimumSize: const Size(double.infinity, 35)
+                      ),
+                      onPressed: () async => await _updateDeviceInfo(), 
+                      child: const Text('Update'),
+                    )
+                  ], 
+                ),
+              )
+            )
       )
     );
   }

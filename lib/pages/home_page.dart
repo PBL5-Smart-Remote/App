@@ -1,9 +1,14 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_home_fe/pages/generic_page.dart';
+import 'package:smart_home_fe/utils/business/show_snackbar.dart';
 import 'package:smart_home_fe/utils/widget/appbar_title.dart';
 import 'package:smart_home_fe/utils/widget/figure_icon_view.dart';
+import 'package:smart_home_fe/view_models/device_view_model.dart';
+import 'package:smart_home_fe/view_models/room_list_view_model.dart';
 import 'package:smart_home_fe/views/device_list_view.dart';
 import 'package:smart_home_fe/views/room_list_view.dart';
 import 'package:smart_home_fe/views/sensor_view.dart';

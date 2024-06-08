@@ -1,9 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:gradient_elevated_button/gradient_elevated_button.dart';
 import 'package:smart_home_fe/services/user_service.dart';
 import 'package:smart_home_fe/utils/business/show_alert_dialog.dart';
+import 'package:smart_home_fe/utils/business/show_snackbar.dart';
 import 'package:smart_home_fe/utils/business/validators.dart';
 import 'package:smart_home_fe/utils/widget/password_text_form_field.dart';
 
@@ -34,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
       if (await UserService().login(username, password)) {
         Navigator.pushReplacementNamed(context, '/index');
       } else {
-        showAlertDialog(context, "Incorrect username or password");
+        showSnackBar(context, 'Error', 'Incorrect username or password', ContentType.failure);
       }
     }
   }
@@ -56,11 +58,14 @@ class _LoginPageState extends State<LoginPage> {
             left: screenWidth / 10,
             width: 80,
             height: 200,
-            child: Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/images/light_1.png')
-                )
+            child: GestureDetector(
+              onDoubleTap: () => showSnackBar(context, 'From ayhoub', 'Hong Diem de thuong qua di', ContentType.help),
+              child: Container(
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/light_1.png')
+                  )
+                ),
               ),
             ),
           ),

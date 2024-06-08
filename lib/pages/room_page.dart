@@ -8,14 +8,14 @@ import 'package:smart_home_fe/utils/widget/appbar_title.dart';
 import 'package:smart_home_fe/utils/widget/figure_icon_view.dart';
 import 'package:smart_home_fe/views/sensor_view.dart';
 
-class RoomDevicesPage extends StatefulWidget {
-  RoomDevicesPage({super.key});
+class RoomPage extends StatefulWidget {
+  RoomPage({super.key});
 
   @override
-  State<RoomDevicesPage> createState() => _RoomDevicesPageState();
+  State<RoomPage> createState() => _RoomPageState();
 }
 
-class _RoomDevicesPageState extends State<RoomDevicesPage> {
+class _RoomPageState extends State<RoomPage> {
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
@@ -43,7 +43,7 @@ class _RoomDevicesPageState extends State<RoomDevicesPage> {
                         crossAxisSpacing: 5,
                         crossAxisCount: 2,
                         physics: const BouncingScrollPhysics(),
-                        children:roomViewModel.room!.deviceList.map((device) => DeviceView(device, isEditable: true)).toList()
+                        children: roomViewModel.room!.deviceList.map((device) => DeviceView(device, isEditable: true)).toList()
                       ),
                     )
                   ],

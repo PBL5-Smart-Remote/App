@@ -1,26 +1,35 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:smart_home_fe/models/device_control_model.dart';
+import 'package:smart_home_fe/models/device_label_model.dart';
 import 'package:smart_home_fe/models/device_model.dart';
 import 'package:smart_home_fe/models/device_update_model.dart';
 import 'package:smart_home_fe/services/device_service.dart';
-import 'package:smart_home_fe/services/room_service.dart';
 
 class DeviceViewModel with ChangeNotifier {
   final DeviceService _deviceService = DeviceService();
-  final RoomService _roomService = RoomService();
 
-  DeviceModel? _device;
+  List<DeviceModel> _devices = List.empty();
+  List<DeviceModel> get devices => _devices;
 
-  DeviceModel? get device => _device;
-
-  List<String> deviceTypes = List.empty(growable: true);
-  List<(String, String)> roomsInfo = List.empty(growable: true);
+  Future<List<DeviceModel>> getDevices() async {
+    try {
+      _devices = await _deviceService.getAllDevices();
+      notifyListeners();
+      return _devices;
+    } catch (err) {
+      print('[DeviceListViewModel][GetRooms]: $err');
+      return List.empty();
+    }
+  }
 
   Future<bool> changeStatus(DeviceControlModel device) async {
     try {
+      // _devices[device.idDevice]!.status = device.status;
+      // notifyListeners();
       await _deviceService.changeStatus(device);
-      notifyListeners();
       return true;
     } catch (err) {
       print('[DeviceViewModel][ChangeStatus]: $err');
@@ -28,40 +37,37 @@ class DeviceViewModel with ChangeNotifier {
     }
   }
 
-  Future<void> initDeviceInfo() async {
+  Future<List<DeviceLabelModel>> getDeviceLabels(String type) async {
     try {
-      deviceTypes = await _deviceService.getDeviceTypes();
-      roomsInfo = await _roomService.getRoomsInfo();
+      return await _deviceService.getLabelByDeviceType(type);
     } catch (err) {
       print('[DeviceViewModel][InitDeviceInfo]: $err');
+      return List.empty();
     }
   }
 
-  void clearData() {
-    try {
-      _device = null;
-    } catch (err) {
-      print('[DeviceViewModel][ClearData]: $err');
-    }
-  }
 
-  Future<void> getDeviceInfo(String id) async {
+
+  Future<DeviceModel?> getDeviceInfo(String id) async {
     try {
-      _deviceService.getDeviceInfo(id).then((value) {
-        _device = value;
-        notifyListeners();
-      });
+      return await _deviceService.getDeviceInfo(id);
     } catch (err) {
       print('[DeviceViewModel][GetDeviceInfo]: $err');
+      return null;
     }
   }
 
-  Future<bool> updateDeviceInfo(DeviceUpdateModel device) async {
+  Future<bool> updateDeviceInfo(DeviceModel device) async {
     try {
-      return await _deviceService.updateDeviceInfo(device);
+      if (await _deviceService.updateDeviceInfo(device)) {
+        return true;
+      } else {
+        return false;
+      }
     } catch (err) {
       print('[DeviceViewModel][UpdateDeviceInfo]: $err');
       return false;
     }
   }
+
 }

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:smart_home_fe/models/device_control_model.dart';
 import 'package:smart_home_fe/models/device_model.dart';
 import 'package:smart_home_fe/view_models/device_view_model.dart';
+import 'package:smart_home_fe/view_models/room_view_model.dart';
 
 class DeviceView extends StatefulWidget {
   DeviceModel device;
@@ -18,9 +19,9 @@ class _DeviceViewState extends State<DeviceView> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onLongPress: widget.isEditable 
-      ? () => Navigator.pushNamed(context, '/edit-device', arguments: {'id': widget.device.id})
-              .then((value) => Provider.of<DeviceViewModel>(context, listen: false).clearData())
+      onTap: widget.isEditable 
+      ? () => Navigator.pushNamed(context, '/edit-device', arguments: {'id': widget.device.id, 'type': widget.device.type})
+              .then((value) => Provider.of<RoomViewModel>(context, listen: false).getRoomById(widget.device.idRoom))
       : null,
       child: Container(
         padding: const EdgeInsets.all(10),
@@ -66,10 +67,10 @@ class _DeviceViewState extends State<DeviceView> {
                       inactiveTrackColor: Colors.grey[300],
                       onChanged: (value) async {
                         final newStatus = value ? 1 : 0;
-                        await deviceViewModel.changeStatus(DeviceControlModel(widget.device.id, newStatus));
                         setState(() {
                           widget.device.status = newStatus;
                         });
+                        await deviceViewModel.changeStatus(DeviceControlModel(widget.device.id, newStatus));
                       },
                     ),
                   )

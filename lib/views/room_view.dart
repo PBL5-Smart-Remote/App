@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_home_fe/models/room_brief_model.dart';
-import 'package:smart_home_fe/pages/room_devices_page.dart';
+import 'package:smart_home_fe/pages/room_page.dart';
 import 'package:smart_home_fe/view_models/room_view_model.dart';
 
 class RoomView extends StatefulWidget {
@@ -41,7 +41,7 @@ class _RoomViewState extends State<RoomView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(widget.room.roomName, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+                  Text(widget.room.roomName, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
                   Text("${widget.room.numDevices} devices, ${widget.room.numConnected} connected", style: TextStyle(color: Colors.grey[600]))
                 ],
               ),
@@ -49,7 +49,7 @@ class _RoomViewState extends State<RoomView> {
           ],
         ),
       ),
-      onLongPress: () {
+      onTap: () {
         Navigator.pushNamed(
           context, 
           '/room',

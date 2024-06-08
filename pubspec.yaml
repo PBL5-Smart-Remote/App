@@ -51,6 +51,9 @@ dependencies:
   wifi_iot: ^0.3.19
   wifi_scan: ^0.4.1
   record: ^5.0.5
+  day_picker: ^2.2.0
+  time_picker_spinner: ^1.0.0
+  awesome_snackbar_content: ^0.1.1
 
 dev_dependencies:
   flutter_test:

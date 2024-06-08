@@ -42,4 +42,6 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-/lib/config
+/lib/config/
+/lib/api/esp_api.dart
+/lib/services/esp_service.dart

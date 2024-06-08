@@ -1,6 +1,9 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 import 'package:smart_home_fe/config/api_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_home_fe/models/user_model.dart';
@@ -13,18 +16,20 @@ class UserAPI {
   final String _getAllUsernameAPI = '/users/all-username';
   final String _getUserInfoAPI = '/users';
 
+  final dio = Dio();
+
   Future<bool> login(String username, String password) async {
     try {
-      final response = await http.post(
-        Uri.https(APIConfig.baseServerAppURL, _loginAPI),
-        body: {
+      String url = Uri.https(APIConfig.baseServerAppURL, _loginAPI).toString();
+      final response = await dio.post(
+        url,
+        data: {
           'username': username,
           'password': password
         }
       );
-      print(response.statusCode);
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
+        final data = response.data;
         print(data);
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('token', data['token']);
@@ -46,18 +51,21 @@ class UserAPI {
         print('No token stored');
         return false;
       }
-      final response = await http.post(
-        Uri.https(APIConfig.baseServerAppURL, _verifyTokenAPI),
-        headers: {
-          "Authorization": token
-        }
+
+      String url = Uri.https(APIConfig.baseServerAppURL, _verifyTokenAPI).toString();
+      final response = await dio.post(
+        url,
+        options: Options(
+          headers: {
+            "Authorization": token
+          }
+        ),
       );
 
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
+        final data = response.data;
         print(data);
         await prefs.setString("token", data['token']);
-        
         return true;
       } else {
         return false;
@@ -76,9 +84,11 @@ class UserAPI {
     String dateofbirth, 
     String phonenumber) async {
     try {
-      final response = await http.post(
-        Uri.https(APIConfig.baseServerAppURL, _registerAPI),
-        body : {
+      String url = Uri.https(APIConfig.baseServerAppURL, _registerAPI).toString();
+
+      final response = await dio.post(
+        url,
+        data : {
           "name": name, 
           "username": username,
           "password": password, 
@@ -101,16 +111,20 @@ class UserAPI {
       if(token == null) {
         return false;
       }
-      final response = await http.patch(
-        Uri.https(APIConfig.baseServerAppURL, _changePasswordAPI),
-        headers: {
-          "Authorization" : token
-        },
-        body: {
+
+      String url = Uri.https(APIConfig.baseServerAppURL, _changePasswordAPI).toString();
+      final response = await dio.patch(
+        url,
+        options: Options(
+          headers: {
+            "Authorization" : token
+          },
+        ),
+        data: {
           "password": password
         }
       );
-      print(jsonDecode(response.body));
+      print(response.data);
       return response.statusCode == 200;
     } catch (err) {
       print('[UserAPI][ChangePassword]: $err');
@@ -120,11 +134,12 @@ class UserAPI {
   
   Future<List<String>> getAllUsername() async {
     try {
-      final response = await http.get(
-        Uri.https(APIConfig.baseServerAppURL, _getAllUsernameAPI),
+      String url = Uri.https(APIConfig.baseServerAppURL, _getAllUsernameAPI).toString();
+      final response = await dio.get(
+        url,
       );
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
+        final data = response.data;
         return data['usernames'].map((username) => username).toList();
       } else {
         return List.empty();
@@ -137,11 +152,12 @@ class UserAPI {
 
   Future<UserModel?> getUserInfo(String id) async {
     try {
-      final response = await http.get(
-        Uri.https(APIConfig.baseServerAppURL, '$_getUserInfoAPI/$id')
+      String url = Uri.https(APIConfig.baseServerAppURL, '$_getUserInfoAPI/$id').toString();
+      final response = await dio.get(  
+        url,
       );
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
+        final data = response.data;
         print(data);
         return UserModel(
           data['_id'],

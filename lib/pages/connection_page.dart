@@ -9,7 +9,7 @@ import 'package:smart_home_fe/views/accesspoint_view.dart';
 
 class ConnectionPage extends GenericPage{
   ConnectionPage({super.key}) {
-    name = const Text("Connection");
+    name = const Text("Connect");
     icon = const Icon(Icons.search);
     selectedColor = Colors.orange;
   }

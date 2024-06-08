@@ -1,28 +1,33 @@
-import 'dart:convert';
+// ignore_for_file: avoid_print
 
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 import 'package:smart_home_fe/config/api_config.dart';
 import 'package:smart_home_fe/models/device_model.dart';
 import 'package:smart_home_fe/models/room_brief_model.dart';
 import 'package:smart_home_fe/models/room_model.dart';
 
 class RoomAPI {
-  // final String _getRoomsAPI = "/rooms/allRooms";
+
   final String _getRoomsInfo = '/rooms';
 
-  // get all rooms homepage
+  final dio = Dio();
+
   Future<List<RoomBriefModel>> getRooms () async {
     try {
       // var prefs = await SharedPreferences.getInstance();
       // var token = prefs.getString('token');
-      final response = await http.get(
-        Uri.http(APIConfig.baseServerAppURL, '$_getRoomsInfo/allRooms'),
-        // headers: { 
-        //   "Authorization": token!
-        // },
+      String url = Uri.https(APIConfig.baseServerAppURL, '$_getRoomsInfo/allRooms').toString();
+
+      final response = await dio.get(
+        url,
+        // options: Options(
+        //   headers: { 
+        //     "Authorization": token!
+        //   },
+        // ),
       );
       if(response.statusCode == 200) {
-        final data = jsonDecode(response.body);
+        final data = response.data;
         print(data['rooms']);
         return List.from(data['rooms'].map((room) => RoomBriefModel(
           room['_id'],
@@ -40,19 +45,23 @@ class RoomAPI {
     }
   } 
 
-  // get room by id (room_devices_page)
   Future<RoomModel?> getRoomById(String id) async {
     try {
       // var prefs = await SharedPreferences.getInstance();
       // var token = prefs.getString('token');
-      final response = await http.get(
-        Uri.http(APIConfig.baseServerAppURL, '$_getRoomsInfo/$id'),
-        // headers: {
-        //   "Authorization": token!
-        // },
+      String url = Uri.https(APIConfig.baseServerAppURL, '$_getRoomsInfo/$id').toString();
+
+      final response = await dio.get(
+        url,
+        // options: Options(
+        //   headers: {
+        //     "Authorization": token!
+        //   },
+        // ),
       );
       if(response.statusCode == 200) {
-        final room = jsonDecode(response.body)['room'];
+        final room = response.data['room'];
+        print(room);
         return RoomModel(
           room['_id'],
           room['name'],
@@ -63,6 +72,8 @@ class RoomAPI {
             room['_id'] ?? '',
             room['name'] ?? '',
             device['name'] ?? 'no_name',
+            device['idDeviceLabel'] ?? '', 
+            device['deviceLabel'] ?? '',
             device['type'] ?? '',
             device['isConnected'] ?? false,
             device['status'] ?? 0
@@ -82,14 +93,18 @@ class RoomAPI {
     try {
       // var prefs = await SharedPreferences.getInstance();
       // var token = prefs.getString('token');
-      final response = await http.get(
-        Uri.http(APIConfig.baseServerAppURL, _getRoomsInfo),
-        // headers: {
-        //   "Authorization": token!
-        // },
+      String url = Uri.https(APIConfig.baseServerAppURL, _getRoomsInfo).toString();
+
+      final response = await dio.get(
+        url,
+        // options: Options(
+        //   headers: {
+        //     "Authorization": token!
+        //   },
+        // ),
       );
       if(response.statusCode == 200) {
-        final data = jsonDecode(response.body);
+        final data = response.data;
         return List.from(data.map((room) => (room['_id'], room['name'])));
       } else {
         return List.empty();

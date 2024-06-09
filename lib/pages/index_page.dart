@@ -40,7 +40,7 @@ class _IndexPageState extends State<IndexPage> {
   @override
   void initState() {
     super.initState();
-    _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
       Provider.of<DeviceViewModel>(context, listen: false).getDevices();
       Provider.of<RoomListViewModel>(context, listen: false).getRooms();
       Provider.of<ScheduleViewModel>(context, listen: false).getAllSchedules();

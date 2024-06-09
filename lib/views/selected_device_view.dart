@@ -17,7 +17,7 @@ class _SelectedDeviceViewState extends State<SelectedDeviceView> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          widget.isSelected = !widget.isSelected;
+          widget.device.status = widget.device.status == 1 ? 0 : 1;
         });
       },
       child: Container(
@@ -26,7 +26,7 @@ class _SelectedDeviceViewState extends State<SelectedDeviceView> {
         decoration: BoxDecoration(
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.circular(10),
-          color: widget.isSelected ? Colors.green : Colors.grey,
+          gradient: LinearGradient(colors: widget.device.status == 1 ? widget.device.colors : [Colors.grey[400]!, Colors.grey[400]!]),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

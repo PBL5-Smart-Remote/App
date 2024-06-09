@@ -73,7 +73,7 @@ class ScheduleAPI {
       final response = await dio.post(
         url,
         data: {
-          'devices': schedule.devices.map((device) => { "_id" : device, 'status': 1 }).toList(),
+          'devices': schedule.devices.map((device) => { "_id" : device.id, 'status': device.status }).toList(),
           'name': schedule.name,
           'daysOfWeek': schedule.daysOfWeek,
           'time': {
@@ -96,7 +96,7 @@ class ScheduleAPI {
       final response = await dio.post(
         url,
         data: {
-          'devices': schedule.devices.map((device) => { "_id" : device, 'status': 1 }).toList(),
+          'devices': schedule.devices.map((device) => { "_id" : device.id, 'status': device.status }).toList(),
           'name': schedule.name,
           'daysOfWeek': schedule.daysOfWeek,
           'time': {

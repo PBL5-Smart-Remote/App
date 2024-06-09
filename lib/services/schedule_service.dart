@@ -25,6 +25,7 @@ class ScheduleService {
 
   Future<bool> addNewSchedule(AddUpdateScheduleModel schedule) async {
     try {
+      
       return await scheduleAPI.addNewSchedule(schedule);
     } catch (err) {
       print('[ScheduleService][AddNewSchedule]: $err');

@@ -46,7 +46,7 @@ class _UpdateSchedulePageState extends State<UpdateSchedulePage> {
   void onPressed() {
     List<int> selectedDays = days.where((day) => day.isSelected == true).map((day) => int.parse(day.dayKey)).toList();
     String scheduleName = _scheduleNameController.text;
-    List<String> selectedDevices = devices.where((device) => device.isSelected == true).map((device) => device.device.id).toList();
+    List<({String id, int status})> selectedDevices = devices.map((device) => (id: device.device.id, status: device.device.status)).toList();
     print(selectedTime.hour);
     print(selectedTime.minute);
     print(selectedDays);

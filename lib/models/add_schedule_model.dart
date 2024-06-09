@@ -1,7 +1,7 @@
 class AddUpdateScheduleModel {
   String? id;
   String name;
-  List<String> devices = [];
+  List<({String id, int status})> devices = [];
   int hour;
   int minute;
   List<int> daysOfWeek = [];

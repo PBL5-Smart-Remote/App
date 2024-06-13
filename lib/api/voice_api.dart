@@ -36,11 +36,11 @@ class VoiceAPI {
         print(data);
         return data['label'] ?? 'Cannot recognize';
       } else {
-        return "";
+        return "Cannot recognize";
       }
     } catch (err) {
       print('[VoiceAPI][SendVoice]: $err');
-      return "";
+      return "Cannot recognize";
     }
   }
 }

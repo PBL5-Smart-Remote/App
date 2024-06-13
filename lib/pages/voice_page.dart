@@ -1,16 +1,15 @@
-import 'dart:async';
-import 'dart:io';
+// ignore_for_file: avoid_single_cascade_in_expression_statements, avoid_print
 
-import 'package:flutter/foundation.dart';
+import 'dart:async';
+
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:record/record.dart';
 import 'package:smart_home_fe/pages/generic_page.dart';
 import 'package:smart_home_fe/services/voice_service.dart';
 import 'package:smart_home_fe/utils/business/format_number.dart';
 import 'package:smart_home_fe/utils/business/sound_recorder.dart';
 import 'package:smart_home_fe/utils/widget/appbar_title.dart';
-import 'package:path_provider/path_provider.dart';
 
 class VoicePage extends GenericPage {
   VoicePage({super.key}) {
@@ -88,6 +87,23 @@ class _VoicePageState extends State<VoicePage> {
     return await voiceService.sendVoice(voicePath!);
   }
 
+  Map<String, String> labels = {
+    'bat_den_1': 'Bật đèn 1',
+    'bat_den_2': 'Bật đèn 2',
+    'bat_den_3': 'Bật đèn 3',
+    'tat_den_1': 'Tắt đèn 1',
+    'tat_den_2': 'Tắt đèn 2',
+    'tat_den_3': 'Tắt đền 3',
+    'bat_quat_1': 'Bật quạt 1',
+    'bat_quat_2': 'Bật quạt 2',
+    'bat_quat_3': 'Bật quạt 3',
+    'tat_quat_1': 'Tắt quạt 1',
+    'tat_quat_2': 'Tát quạt 2',
+    'tat_quat_3': 'Tát quạt 3',
+    'mo_cua': 'Mở cửa',
+    'dong_cua': 'Đóng cửa',
+  };
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,8 +120,17 @@ class _VoicePageState extends State<VoicePage> {
                 _buildRecordStopControl(),
                 if (_recordState == RecordState.stop && voicePath != null) IconButton(
                   onPressed: () async {
-                    label = await _sendVoice();
-                    setState(() {});
+                    _sendVoice().then((label) {
+                      AwesomeDialog(
+                        context: context,
+                        animType: AnimType.scale,
+                        dialogType: label != 'Cannot recognize' ? DialogType.success : DialogType.error,
+                        title: label != 'Cannot recognize' ? 'Success' : 'Failed',
+                        desc:  labels[label],
+                        btnOkOnPress: null,
+                      )..show();
+                    });
+                    // setState(() {});
                   }, 
                   icon: const Icon(Icons.send)
                 ),
@@ -113,7 +138,7 @@ class _VoicePageState extends State<VoicePage> {
                 _buildText()
               ],
             ),
-            if (_recordState == RecordState.stop) Text(label),
+            // if (_recordState == RecordState.stop) Text(label),
           ],
         ),
       )
